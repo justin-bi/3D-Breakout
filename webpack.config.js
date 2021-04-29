@@ -41,7 +41,7 @@ module.exports = {
             },
         ],
     },
-    resolve: {
+    resolve: {  // SEE HERE if you want to add more folders to the components directory
         alias: {
             lights$: path.resolve(__dirname, 'src/components/lights'),
             objects$: path.resolve(__dirname, 'src/components/objects'),

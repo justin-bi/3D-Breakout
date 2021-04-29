@@ -1,0 +1,3 @@
+- If you want to add more objects to /objects, edit /objects/index.js
+- If you're adding more things to /components, edit webpack.config.js
+- Tween.js is super useful for animation transition stuff, might want to check out
