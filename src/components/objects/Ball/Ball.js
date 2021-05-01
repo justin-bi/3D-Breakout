@@ -10,10 +10,10 @@ class Ball extends Group {
 
         // Init state
         this.state = {
-            // Empty for now, can populate later if wanted
+            // The direction of the ball, start by just going straight down
+            vel: new THREE.Vector3(0, -0.01, 0),
         };
 
-        this.name = 'ball';
 
         const geometry = new THREE.SphereGeometry(0.3, 8, 8);
         const material = new THREE.MeshPhongMaterial(
@@ -24,7 +24,7 @@ class Ball extends Group {
         );
         this.mesh = new THREE.Mesh(geometry, material);
 
-        this.vel = new THREE.Vector3(0, -0.01, 0);   // THe direction of the ball, start by just going straight down
+        this.name = 'ball';
 
         parent.add(this.mesh);
 
@@ -57,15 +57,13 @@ class Ball extends Group {
     update(timeStamp) {
 
         
-        // For now, don't do anything
+        // Just bounce up and down for now
         if (this.mesh.position.y > -1 && this.mesh.position.y < 1) {
-            this.mesh.position.y += this.vel.y
+            this.mesh.position.y += this.state.vel.y
         } else {
-            this.mesh.position.y -= this.vel.y
-            this.vel.y *= -1
+            this.mesh.position.y -= this.state.vel.y
+            this.state.vel.y *= -1
         }
-
-
 
         // Advance tween animations, if any exist
         // TWEEN.update();

@@ -1,9 +1,9 @@
 import * as Dat from 'dat.gui';
 import { Scene, Color } from 'three';
 // import { Flower, Land } from 'objects';
-import { Ball } from 'objects';
+import { Ball, Border } from 'objects';
 import { BasicLights } from 'lights';
-import * as THREE from 'three' // Probably need to change later, doing this for now for simplicity
+import * as THREE from 'three' 
 
 let COLORS = [0x00916e, 0xAEFFD8, 0xE44E5A, 0xFF990A, 0x6369D1];
 const PLATFORM_COLOR = 0x00916e;
@@ -98,34 +98,29 @@ let addBorder = function(scene, xDistance, yDistanceAbove, yDistanceBelow, borde
     // use one border material for entire border
     const borderMat = new THREE.MeshPhongMaterial({ color: borderColor, flatShading: true });
 
-    let height = yDistanceAbove - yDistanceBelow;
+    const height = yDistanceAbove - yDistanceBelow;
 
-    let yShift = yDistanceAbove - height/2;
+    const yShift = yDistanceAbove - height/2;
     const sideBorderGeom = new THREE.BoxGeometry(thickness, (yDistanceAbove - yDistanceBelow), 1);
-    const leftBorderMesh = new THREE.Mesh(sideBorderGeom, borderMat);
-    const rightBorderMesh = new THREE.Mesh(sideBorderGeom, borderMat);
 
-    // shift side borders
-    leftBorderMesh.translateX(xDistance);
-    leftBorderMesh.translateY(yShift);
+    // Add in the left border
+    const leftTranslate = new THREE.Vector3(xDistance, yShift, 0);
+    const leftBorderMesh = new Border(scene, sideBorderGeom, leftTranslate)
 
-    rightBorderMesh.translateX(-xDistance);
-    rightBorderMesh.translateY(yShift);
-
-    scene.add(leftBorderMesh);
-    scene.add(rightBorderMesh);
+    // Add right border
+    const rightTranslate = new THREE.Vector3(-xDistance, yShift, 0);
+    const rightBorderMesh = new Border(scene, sideBorderGeom, rightTranslate);
 
     // add in the thickness here to acocunt for corners
     const horizontalBorderGeom = new THREE.BoxGeometry(xDistance * 2 + thickness, thickness, 1);
-    const topBorderMesh = new THREE.Mesh(horizontalBorderGeom, borderMat);
-    const bottomBorderMesh = new THREE.Mesh(horizontalBorderGeom, borderMat);
 
-    // shift top borders
-    topBorderMesh.translateY(yDistanceAbove);
-    bottomBorderMesh.translateY(yDistanceBelow);
+    // Add top border
+    const topTranslate = new THREE.Vector3(0, yDistanceAbove, 0);
+    const topBorderMesh = new Border(scene, horizontalBorderGeom, topTranslate);
 
-    scene.add(topBorderMesh);
-    scene.add(bottomBorderMesh);
+    // Add bottom border
+    const bottomTranslate = new THREE.Vector3(0, yDistanceBelow, 0);
+    const bottomBorderMesh = new Border(scene, horizontalBorderGeom, bottomTranslate);
 
     let borderMesh = {
         left: leftBorderMesh,
