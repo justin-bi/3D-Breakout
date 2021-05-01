@@ -18,13 +18,22 @@ class Brick extends Group {
 
         const brickMat = new THREE.MeshPhongMaterial({ color: color, flatShading: true });
         this.mesh = new THREE.Mesh(brickGeom, brickMat);
-        this.mesh.name = 'brick'
+        this.mesh.name = 'brick';
         this.mesh.position.add(translateVec);
 
-        parent.add(this.mesh);   // Or this.mesh, most likely
+        // add a reference to the brick object to its mesh
+        this.mesh.userData.brick = this;
+
+        parent.add(this.mesh);
 
         // Add self to parent's update list (if needed)
         parent.addToUpdateList(this);
+    }
+
+    remove() {
+        this.mesh.geometry.dispose();
+        this.mesh.material.dispose();
+        this.mesh.parent.remove(this.mesh);
     }
 
     update(timeStamp) {

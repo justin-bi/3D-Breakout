@@ -20,6 +20,7 @@ class Border extends Group {
         this.mesh = new THREE.Mesh(geom, borderMat);
         // Translates the vec at the starting position, maybe put this in its own function
         this.mesh.position.add(translateVec);
+        this.mesh.name = "border";
         parent.add(this.mesh);
 
         // Add self to parent's update list

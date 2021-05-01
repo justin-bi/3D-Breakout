@@ -21,12 +21,13 @@ const BLACK_SHADE = 0x222222;
  * represents the y distance above the origin to start placing the bricks at.
  * maxWidthOfBrick and heightOfBrick are the max width and height the brick can
  * be set to, but the actual width/height of brick will be slightly less
- * to create gaps between bricks. Finally, the function stores all of the bricks
- * it creates in a 2D array of bricks that it returns, and adds all of the meshes
- * it creates for bricks to the scene.
+ * to create gaps between bricks. Finally, the function returns the
+ * number of bricks created.
  */
 let populateWithBlocks = function(scene, numRows, minBricksPerRow, maxWidthOfBrick, maxHeightOfBrick, interval) {
-    let bricks = [];
+    // let bricks = [];
+    // TODO: clean up leftover array stuff
+    let totalBricks = 0;
 
     // decrease width and height slightly to allow for gaps
     let actualWidth = maxWidthOfBrick * 0.95;
@@ -44,7 +45,7 @@ let populateWithBlocks = function(scene, numRows, minBricksPerRow, maxWidthOfBri
         extraEvenBrick = 0;
 
     for (let i = 0; i < numRows; i++) {
-        let rowOfBricks = [];
+        // let rowOfBricks = [];
 
         let numBricks = minBricksPerRow;
 
@@ -73,22 +74,24 @@ let populateWithBlocks = function(scene, numRows, minBricksPerRow, maxWidthOfBri
 
             const translateVec = new THREE.Vector3(
                 origin - 2 * j - adjustment,
-                (numRows - i) * 0.5 + interval, 
+                (numRows - i) * 0.5 + interval,
                 0
-            )
-            const brick = new Brick(scene, COLORS[colorIndex], brickGeom, translateVec);
+            );
 
-            rowOfBricks.push(brick);
+            const brick = new Brick(scene, COLORS[colorIndex], brickGeom, translateVec);
+            totalBricks++;
+
+            // rowOfBricks.push(brick);
         }
 
-        bricks.push(rowOfBricks);
+        // bricks.push(rowOfBricks);
     }
 
-    return bricks;
+    return totalBricks;
 };
 
 /**
- * Add a visual border around the scene in question which has
+ * Adds visual borders around the scene in question which has
  * a distance of xDistance from x coordinate of origin and
  * distance of yDistance from y coordinate of origin and
  * is at z = 0. The color of the border should be the
@@ -96,7 +99,7 @@ let populateWithBlocks = function(scene, numRows, minBricksPerRow, maxWidthOfBri
  * the passed-in thickness. Return an object containing all
  * of the border meshes as fields.
  */
-let addBorder = function(scene, xDistance, yDistanceAbove, yDistanceBelow, borderColor, thickness) {
+let addBorders = function(scene, xDistance, yDistanceAbove, yDistanceBelow, borderColor, thickness) {
     // use one border material for entire border
     const borderMat = new THREE.MeshPhongMaterial({ color: borderColor, flatShading: true });
 
@@ -153,30 +156,29 @@ class BreakoutScene extends Scene {
 
         const lights = new BasicLights();
 
-        const MAX_WIDTH_OF_BRICKS = 2;
-        const MAX_HEIGHT_OF_BRICKS = 0.5;
-        const MAX_BRICKS_PER_ROW = 5;
-        const NUM_ROWS = 3;
-
         // how much space to leave betwen the origin and the start of blocks
         const SPACE_ABOVE_ORIGIN = 2;
         // how much space to leave between origin and cursor
         const SPACE_BELOW_ORIGIN = 2;
 
-        // Add in a platform object
+        // Add in a platform object with this width and height
+        const PLATFORM_WIDTH = 5;
         const PLATFORM_HEIGHT = 0.3;
 
-        const platform = new Platform(this, PLATFORM_COLOR);
-        this.add(platform);
-        // const platformGeom = new THREE.BoxGeometry(5, PLATFORM_HEIGHT, 1);
-        // const platformMat = new THREE.MeshPhongMaterial({ color: PLATFORM_COLOR, flatShading: true });
-        // const platformMesh = new THREE.Mesh(platformGeom, platformMat);
-        // platformMesh.translateY(-SPACE_BELOW_ORIGIN);
+        const platform = new Platform(this, PLATFORM_COLOR, PLATFORM_WIDTH,
+            PLATFORM_HEIGHT, SPACE_BELOW_ORIGIN);
 
+        // specifies size, num of rows and bricks we want
+        const MAX_WIDTH_OF_BRICKS = 2;
+        const MAX_HEIGHT_OF_BRICKS = 0.5;
+        const MAX_BRICKS_PER_ROW = 5;
+        const NUM_ROWS = 3;
 
         // bricks is the array of bricks we've created
-        let bricks = populateWithBlocks(this, NUM_ROWS, MAX_BRICKS_PER_ROW - 1, MAX_WIDTH_OF_BRICKS,
+        let numBricks = populateWithBlocks(this, NUM_ROWS, MAX_BRICKS_PER_ROW - 1, MAX_WIDTH_OF_BRICKS,
             MAX_HEIGHT_OF_BRICKS, SPACE_ABOVE_ORIGIN);
+
+        this.userData.bricksLeft = numBricks;
 
         let xDistance = (MAX_BRICKS_PER_ROW * MAX_WIDTH_OF_BRICKS)/2;
         let yDistanceAbove = MAX_HEIGHT_OF_BRICKS * NUM_ROWS + SPACE_ABOVE_ORIGIN;
@@ -186,11 +188,9 @@ class BreakoutScene extends Scene {
 
         // borderMesh holds all of the meshes that we created as borders
         let borderMesh =
-            addBorder(this, xDistance + OFFSET, yDistanceAbove + 2 * OFFSET, yDistanceBelow - OFFSET, BLACK_SHADE, 0.2);
+            addBorders(this, xDistance + OFFSET, yDistanceAbove + 2 * OFFSET, yDistanceBelow - OFFSET, BLACK_SHADE, 0.2);
 
         this.add(lights);
-
-        console.log(this.children)
     }
 
     // Call this with an object to make sure it updates every timeStamp
@@ -205,6 +205,17 @@ class BreakoutScene extends Scene {
         for (const obj of updateList) {
             obj.update(timeStamp);
         }
+    }
+
+    /**
+     * Removes the passed-in brick from the scene and
+     * reduces the number of overall bricks.
+     */
+    removeBrick(brick) {
+        this.userData.bricksLeft--;
+        brick.remove();
+        
+        // TODO: end game when zero bricks left
     }
 }
 

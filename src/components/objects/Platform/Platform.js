@@ -1,10 +1,10 @@
 import { Group } from 'three';
 // Potentially useful stuff, just wanted to save a copy from the stuff we deleted
 import { TWEEN } from 'three/examples/jsm/libs/tween.module.min.js';
-import * as THREE from 'three' // Probably need to change later, doing this for now for simplicity
+import * as THREE from 'three'; // Probably need to change later, doing this for now for simplicity
 
 class Platform extends Group {
-    constructor(parent, color) {
+    constructor(parent, color, width, height, yPosition) {
         // Call parent Group() constructor
         super();
 
@@ -15,30 +15,33 @@ class Platform extends Group {
 
         this.name = 'paddle';
 
-        const PLATFORM_HEIGHT = 0.3;
-        const SPACE_BELOW_ORIGIN = 2;
-
-        const geometry = new THREE.BoxGeometry(5, PLATFORM_HEIGHT, 1);
+        const geometry = new THREE.BoxGeometry(width, height, 1);
         const material = new THREE.MeshPhongMaterial({ color: color, flatShading: true });
         this.mesh = new THREE.Mesh(geometry, material);
-        this.mesh.translateY(-SPACE_BELOW_ORIGIN);
+        this.mesh.name = 'paddle';
+        this.mesh.translateY(-yPosition);
+
+        // add a reference to the platform object to its mesh
+        this.mesh.userData.platform = this;
 
         var platform = this.mesh;
         parent.add(this.mesh);
-        let handlePlatformEvents = function(event) {
-          // Ignore keypresses typed into a text box
-          if (event.target.tagName === "INPUT") {
-            return;
-          }
 
-          if (event.key == "ArrowLeft"){
-            platform.translateX(.1);
-          }
-          else if (event.key == "ArrowRight"){
-            platform.translateX(-.1);
-          }
-          else return;
+        let handlePlatformEvents = function(event) {
+            // Ignore keypresses typed into a text box
+            if (event.target.tagName === "INPUT") {
+                return;
+            }
+
+            if (event.key == "ArrowLeft"){
+                platform.translateX(.15);
+            }
+            else if (event.key == "ArrowRight"){
+                platform.translateX(-.15);
+            }
+            else return;
         }
+
         window.addEventListener("keydown", handlePlatformEvents);
     }
 

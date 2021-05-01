@@ -2,6 +2,7 @@ import { Group } from 'three';
 // Potentially useful stuff, just wanted to save a copy from the stuff we deleted
 import { TWEEN } from 'three/examples/jsm/libs/tween.module.min.js';
 import * as THREE from 'three' // Probably need to change later, doing this for now for simplicity
+import { Brick } from 'objects';
 
 let ballI = 0;
 
@@ -27,6 +28,9 @@ class Ball extends Group {
 
         this.mesh.name = 'ball';
         this.parent = parent;
+
+        // add a reference to the ball object to its mesh
+        this.mesh.userData.ball = this;
 
         parent.add(this.mesh);
 
@@ -57,9 +61,7 @@ class Ball extends Group {
     // }
 
     update(timeStamp) {
-
-
-        this.mesh.position.y += this.state.vel.y
+        this.mesh.position.y += this.state.vel.y;
         // Just bounce up and down for now
         // if (this.mesh.position.y > -1 && this.mesh.position.y < 3) {
         //     this.mesh.position.y += this.state.vel.y
@@ -70,25 +72,34 @@ class Ball extends Group {
 
         // Code from here: https://stackoverflow.com/questions/11473755/how-to-detect-collision-in-three-js
         // Open to ideas, since this seems a tad complex
-        let pos = this.mesh.position.clone()
+        let pos = this.mesh.position.clone();
+
         for (let vi = 0; vi < this.mesh.geometry.vertices.length; vi++) {
             let localVert = this.mesh.geometry.vertices[vi];
-            // I think this doesn't actually transform anything, since this mesh was declared at the 
+            // I think this doesn't actually transform anything, since this mesh was declared at the
             // origin, but it's just here for thoroughness
             let globalVert = localVert.clone().applyMatrix4(this.mesh.matrix);
-            let dirVec = globalVert.sub(this.mesh.position)
-            let rayCast = new THREE.Raycaster()
-            rayCast.set(pos, dirVec.clone().normalize())
-            let collisionResults = rayCast.intersectObjects(this.parent.children)
-            // If the ray collides with something, and the first collision (sorted in order of distance) 
+            let dirVec = globalVert.sub(this.mesh.position);
+            let rayCast = new THREE.Raycaster();
+            rayCast.set(pos, dirVec.clone().normalize());
+            let collisionResults = rayCast.intersectObjects(this.parent.children);
+
+            // If the ray collides with something, and the first collision (sorted in order of distance)
             // is less than the distance to the edge of the mesh itself, got a collision
             if (collisionResults.length > 0 && collisionResults[0].distance < dirVec.length()) {
                 // Right now this is assuming it just switches y direction, need to add in angle factor later
-                this.state.vel.y *= -1   
-                // Need this mult factor, otherwise it gets stuck, lower values don't work when it directly 
+                this.state.vel.y *= -1;
+
+                const object = collisionResults[0].object;
+
+                if (object.name === "brick") {
+                    this.mesh.parent.removeBrick(object.userData.brick);
+                }
+
+                // Need this mult factor, otherwise it gets stuck, lower values don't work when it directly
                 // hits the middle of two blocks, but this might change when we add in brick removal
-                this.mesh.position.y += this.state.vel.y * 2 
-                break
+                this.mesh.position.y += this.state.vel.y * 2;
+                break;
             }
         }
     }
