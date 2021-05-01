@@ -2,6 +2,7 @@ import * as Dat from 'dat.gui';
 import { Scene, Color } from 'three';
 // import { Flower, Land } from 'objects';
 import { Ball } from 'objects';
+import { Platform } from 'objects';
 import { BasicLights } from 'lights';
 import * as THREE from 'three' // Probably need to change later, doing this for now for simplicity
 
@@ -9,6 +10,21 @@ let COLORS = [0x00916e, 0xAEFFD8, 0xE44E5A, 0xFF990A, 0x6369D1];
 const PLATFORM_COLOR = 0x00916e;
 // the shade of black for border and ball
 const BLACK_SHADE = 0x222222;
+
+function handlePlatformEvents(event) {
+  // Ignore keypresses typed into a text box
+  if (event.target.tagName === "INPUT") {
+    return;
+  }
+
+  if (event.key == "ArrowLeft"){
+
+  }
+  else if (event.key == "ArrowRight"){
+
+  }
+  else return;
+}
 
 /**
  * Populate the passed-in scene with rows of bricks (number of rows is
@@ -20,7 +36,7 @@ const BLACK_SHADE = 0x222222;
  * maxWidthOfBrick and heightOfBrick are the max width and height the brick can
  * be set to, but the actual width/height of brick will be slightly less
  * to create gaps between bricks. Finally, the function stores all of the bricks
- * it creates in a 2D array of bricks that it returns, and adds all of the meshes 
+ * it creates in a 2D array of bricks that it returns, and adds all of the meshes
  * it creates for bricks to the scene.
  */
 let populateWithBlocks = function(scene, numRows, minBricksPerRow, maxWidthOfBrick, maxHeightOfBrick, interval) {
@@ -47,9 +63,9 @@ let populateWithBlocks = function(scene, numRows, minBricksPerRow, maxWidthOfBri
         let numBricks = minBricksPerRow;
 
         // makes sure we alternate number of bricks
-        if (i % 2 == 0) 
+        if (i % 2 == 0)
             numBricks += extraEvenBrick;
-        else 
+        else
             numBricks += (1 - extraEvenBrick);
 
         // determines which color to start pattern of colors at
@@ -130,7 +146,7 @@ let addBorder = function(scene, xDistance, yDistanceAbove, yDistanceBelow, borde
     let borderMesh = {
         left: leftBorderMesh,
         right: rightBorderMesh,
-        top: topBorderMesh, 
+        top: topBorderMesh,
         bottom: bottomBorderMesh
     };
 
@@ -169,13 +185,16 @@ class BreakoutScene extends Scene {
         // Add in a platform object
         const PLATFORM_HEIGHT = 0.3;
 
-        const platformGeom = new THREE.BoxGeometry(5, PLATFORM_HEIGHT, 1);
-        const platformMat = new THREE.MeshPhongMaterial({ color: PLATFORM_COLOR, flatShading: true });
-        const platformMesh = new THREE.Mesh(platformGeom, platformMat);
-        platformMesh.translateY(-SPACE_BELOW_ORIGIN);
+        const platform = new Platform(this, PLATFORM_COLOR);
+        this.add(platform);
+        // const platformGeom = new THREE.BoxGeometry(5, PLATFORM_HEIGHT, 1);
+        // const platformMat = new THREE.MeshPhongMaterial({ color: PLATFORM_COLOR, flatShading: true });
+        // const platformMesh = new THREE.Mesh(platformGeom, platformMat);
+        // platformMesh.translateY(-SPACE_BELOW_ORIGIN);
+
 
         // bricks is the array of bricks we've created
-        let bricks = populateWithBlocks(this, NUM_ROWS, MAX_BRICKS_PER_ROW - 1, MAX_WIDTH_OF_BRICKS, 
+        let bricks = populateWithBlocks(this, NUM_ROWS, MAX_BRICKS_PER_ROW - 1, MAX_WIDTH_OF_BRICKS,
             MAX_HEIGHT_OF_BRICKS, SPACE_ABOVE_ORIGIN);
 
         let xDistance = (MAX_BRICKS_PER_ROW * MAX_WIDTH_OF_BRICKS)/2;
@@ -185,13 +204,13 @@ class BreakoutScene extends Scene {
         const OFFSET = 0.3;
 
         // borderMesh holds all of the meshes that we created as borders
-        let borderMesh = 
+        let borderMesh =
             addBorder(this, xDistance + OFFSET, yDistanceAbove + 2 * OFFSET, yDistanceBelow - OFFSET, BLACK_SHADE, 0.2);
 
-        this.add(lights, platformMesh);  
+        this.add(lights);
     }
 
-    // Call this with an object to make sure it updates every timeStamp 
+    // Call this with an object to make sure it updates every timeStamp
     addToUpdateList(object) {
         this.state.updateList.push(object);
     }
