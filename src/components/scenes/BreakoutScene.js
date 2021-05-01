@@ -11,20 +11,6 @@ const PLATFORM_COLOR = 0x00916e;
 // the shade of black for border and ball
 const BLACK_SHADE = 0x222222;
 
-function handlePlatformEvents(event) {
-  // Ignore keypresses typed into a text box
-  if (event.target.tagName === "INPUT") {
-    return;
-  }
-
-  if (event.key == "ArrowLeft"){
-
-  }
-  else if (event.key == "ArrowRight"){
-
-  }
-  else return;
-}
 
 /**
  * Populate the passed-in scene with rows of bricks (number of rows is

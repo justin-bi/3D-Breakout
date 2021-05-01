@@ -23,7 +23,23 @@ class Platform extends Group {
         this.mesh = new THREE.Mesh(geometry, material);
         this.mesh.translateY(-SPACE_BELOW_ORIGIN);
 
+        var platform = this.mesh;
         parent.add(this.mesh);
+        let handlePlatformEvents = function(event) {
+          // Ignore keypresses typed into a text box
+          if (event.target.tagName === "INPUT") {
+            return;
+          }
+
+          if (event.key == "ArrowLeft"){
+            platform.translateX(.1);
+          }
+          else if (event.key == "ArrowRight"){
+            platform.translateX(-.1);
+          }
+          else return;
+        }
+        window.addEventListener("keydown", handlePlatformEvents);
     }
 
     // Not needed, but just wanted to keep this code somewhere such that we don't need to completley
