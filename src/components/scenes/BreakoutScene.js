@@ -1,7 +1,7 @@
 import * as Dat from 'dat.gui';
 import { Scene, Color } from 'three';
 // import { Flower, Land } from 'objects';
-import { Ball, Border } from 'objects';
+import { Ball, Border, Brick } from 'objects';
 import { Platform } from 'objects';
 import { BasicLights } from 'lights';
 import * as THREE from 'three' 
@@ -60,10 +60,6 @@ let populateWithBlocks = function(scene, numRows, minBricksPerRow, maxWidthOfBri
         for (let j = 0; j < numBricks; j++) {
             let colorIndex = (colorStart + j) % COLORS.length;
 
-            const brickMat = new THREE.MeshPhongMaterial({ color: COLORS[colorIndex], flatShading: true });
-            const brickMesh = new THREE.Mesh(brickGeom, brickMat);
-
-            brickMesh.translateY((numRows - i) * 0.5 + interval);
 
             // case for an odd number of bricks
             let origin = numBricks/2 + (numBricks - 1)/2;
@@ -75,10 +71,14 @@ let populateWithBlocks = function(scene, numRows, minBricksPerRow, maxWidthOfBri
                 origin = numBricks/2 + (numBricks - 2)/2;
             }
 
-            brickMesh.translateX(origin - 2 * j - adjustment);
+            const translateVec = new THREE.Vector3(
+                origin - 2 * j - adjustment,
+                (numRows - i) * 0.5 + interval, 
+                0
+            )
+            const brick = new Brick(scene, COLORS[colorIndex], brickGeom, translateVec);
 
-            scene.add(brickMesh);
-            rowOfBricks.push(brickMesh);
+            rowOfBricks.push(brick);
         }
 
         bricks.push(rowOfBricks);
@@ -124,6 +124,7 @@ let addBorder = function(scene, xDistance, yDistanceAbove, yDistanceBelow, borde
     const bottomTranslate = new THREE.Vector3(0, yDistanceBelow, 0);
     const bottomBorderMesh = new Border(scene, horizontalBorderGeom, bottomTranslate);
 
+    // NOTE: this is a bit of a misnomer, these are border classes, use (name).mesh to access the mesh
     let borderMesh = {
         left: leftBorderMesh,
         right: rightBorderMesh,

@@ -1,4 +1,5 @@
 import { Group } from 'three';
+import * as THREE from 'three'
 
 // CHANGE THE NAME
 // Also be sure to update /objects/index.js 
