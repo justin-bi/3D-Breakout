@@ -18,6 +18,7 @@ class Brick extends Group {
 
         const brickMat = new THREE.MeshPhongMaterial({ color: color, flatShading: true });
         this.mesh = new THREE.Mesh(brickGeom, brickMat);
+        this.mesh.name = 'brick'
         this.mesh.position.add(translateVec);
 
         parent.add(this.mesh);   // Or this.mesh, most likely

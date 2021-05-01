@@ -150,7 +150,6 @@ class BreakoutScene extends Scene {
 
         // Add the ball to the scene
         const ball = new Ball(this, BLACK_SHADE);
-        this.add(ball);
 
         const lights = new BasicLights();
 
@@ -190,6 +189,8 @@ class BreakoutScene extends Scene {
             addBorder(this, xDistance + OFFSET, yDistanceAbove + 2 * OFFSET, yDistanceBelow - OFFSET, BLACK_SHADE, 0.2);
 
         this.add(lights);
+
+        console.log(this.children)
     }
 
     // Call this with an object to make sure it updates every timeStamp
