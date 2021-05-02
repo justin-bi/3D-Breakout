@@ -151,9 +151,6 @@ class BreakoutScene extends Scene {
         // Set background to a nice color
         this.background = new Color(0x7ec0ee);
 
-        // Add the ball to the scene
-        // const ball = new Ball(this, BLACK_SHADE, new THREE.Vector3(0, 0, 0));
-
         const lights = new BasicLights();
 
         // how much space to leave betwen the origin and the start of blocks
@@ -284,6 +281,7 @@ class BreakoutScene extends Scene {
      */
     handleReset(ball) {
         // adjust the ball so it stops moving and it returns to starting pos
+        // Need to do it this way since mesh.position is readOnly
         let changeInBallPosition = new THREE.Vector3().addVectors(this.defaultBallPosition,
             ball.mesh.position.clone().multiplyScalar(-1));
 

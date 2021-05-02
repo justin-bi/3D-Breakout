@@ -16,8 +16,8 @@ const camera = new PerspectiveCamera();
 const renderer = new WebGLRenderer({ antialias: true });
 
 // Set up camera
-camera.position.set(0, 3, 10);
-camera.lookAt(new Vector3(0, 0, 0));    // Always looks at origin for now, may want to change later?
+camera.position.set(0, 1.5, 10);
+camera.lookAt(new Vector3(0, 0, 0));    // To change where this looks, look at controls.target below
 
 // Set up renderer, canvas, and minor CSS adjustments
 renderer.setPixelRatio(window.devicePixelRatio);
@@ -29,6 +29,7 @@ document.body.appendChild(canvas);
 
 // Set up controls
 const controls = new OrbitControls(camera, canvas);
+controls.target = new Vector3(0, 1.5, 0)  // Changes where the cam focuses
 controls.enableDamping = true;
 controls.enablePan = false;
 controls.minDistance = 4;
