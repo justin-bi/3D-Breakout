@@ -153,9 +153,11 @@ class Ball extends Group {
                     // the paddle it should change angle towards that direction, if the paddle is moving towards it
                     // the ball should move in the same direction, etc. 
                     // this.mesh.position.sub(object.position.)
-                    console.log(this.mesh.position)
-                    console.log(object.position)
-                    console.log('height', object.geometry.parameters.height)
+                    let platTop = object.position.clone().add(new THREE.Vector3(0, object.geometry.parameters.height, 0))
+                    // console.log('platTop', platTop)
+                    // console.log(this.mesh.position)
+                    // console.log(object.position)
+                    // console.log('height', object.geometry.parameters.height)
                     
                 }
 
