@@ -14,7 +14,7 @@ class Ball extends Group {
         // Init state
         this.state = {
             // The direction of the ball, start by just going straight down
-            vel: new THREE.Vector3(0.05, 0.05, 0),
+            vel: new THREE.Vector3(-0.05, 0.05, 0),
         };
 
         const geometry = new THREE.SphereGeometry(radius, 8, 8);
@@ -151,6 +151,11 @@ class Ball extends Group {
                     // Note that it should do something special for the paddle, eg if it hits a certain area of 
                     // the paddle it should change angle towards that direction, if the paddle is moving towards it
                     // the ball should move in the same direction, etc. 
+                    // this.mesh.position.sub(object.position.)
+                    console.log(this.mesh.position)
+                    console.log(object.position)
+                    console.log('height', object.geometry.parameters.height)
+                    
                 }
 
                 // Do this hack for now
