@@ -38,7 +38,7 @@ class Platform extends Group {
             }
 
             // don't move platform unless at least one ball is moving
-            if (!parent.inPlay) return;
+            if (!parent.inPlay || parent.gameOver) return;
 
             if (event.key == "ArrowLeft"){  
                 platform.translateX(-this.speed);

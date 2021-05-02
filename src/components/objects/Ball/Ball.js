@@ -51,6 +51,9 @@ class Ball extends Group {
                 return;
             }
 
+            // if the game is over you shouldn't be able to start again
+            if (parent.gameOver) return;
+
             // start ball moving
             if (event.key == "ArrowUp"){
                 ball.moving = true;
@@ -90,7 +93,7 @@ class Ball extends Group {
         if (!this.moving) return;
 
         // Updated moving code
-        this.mesh.position.add(this.state.vel)
+        this.mesh.position.add(this.state.vel);
 
         // Code from here: https://stackoverflow.com/questions/11473755/how-to-detect-collision-in-three-js
         // Open to ideas, since this seems a tad complex
@@ -153,7 +156,7 @@ class Ball extends Group {
                 //     this.mesh.position.add(this.state.vel.clone().multiplyScalar(2))
                 // }
 
-                this.mesh.position.add(this.state.vel.clone().multiplyScalar(2))
+                this.mesh.position.add(this.state.vel.clone().multiplyScalar(2));
 
                 if (object.name === "brick") {
                     this.mesh.parent.removeBrick(object.userData.brick);
