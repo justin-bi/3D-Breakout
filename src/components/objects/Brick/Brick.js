@@ -6,8 +6,6 @@ class Brick extends Group {
 
     // Take in the parent scene, a color
     constructor(parent, color, brickGeom, translateVec) {
-
-
         // Call parent Group() constructor
         super();
 
@@ -34,6 +32,8 @@ class Brick extends Group {
         this.mesh.geometry.dispose();
         this.mesh.material.dispose();
         this.mesh.parent.remove(this.mesh);
+
+        // TODO: make this cooler (perhaps make it into little blocks then have them drop)
     }
 
     update(timeStamp) {

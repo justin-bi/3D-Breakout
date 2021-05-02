@@ -6,11 +6,19 @@ import { Platform } from 'objects';
 import { BasicLights } from 'lights';
 import * as THREE from 'three' 
 
-let COLORS = [0x00916e, 0xAEFFD8, 0xE44E5A, 0xFF990A, 0x6369D1];
+/* COLOR SCHEME */
+
+// colors for the bricks
+const COLORS = [0x00916e, 0xAEFFD8, 0xE44E5A, 0xFF990A, 0x6369D1];
+// color of the platform
 const PLATFORM_COLOR = 0x00916e;
 // the shade of black for border and ball
 const BLACK_SHADE = 0x222222;
 
+/* GAMEPLAY */
+
+// the number of lives the player gets to start
+const NUMBER_OF_LIVES = 3;
 
 /**
  * Populate the passed-in scene with rows of bricks (number of rows is
@@ -24,9 +32,8 @@ const BLACK_SHADE = 0x222222;
  * to create gaps between bricks. Finally, the function returns the
  * number of bricks created.
  */
-let populateWithBlocks = function(scene, numRows, minBricksPerRow, maxWidthOfBrick, maxHeightOfBrick, interval) {
-    // let bricks = [];
-    // TODO: clean up leftover array stuff
+let populateWithBlocks = function(scene, numRows, minBricksPerRow, maxWidthOfBrick, 
+    maxHeightOfBrick, interval) {
     let totalBricks = 0;
 
     // decrease width and height slightly to allow for gaps
@@ -35,9 +42,8 @@ let populateWithBlocks = function(scene, numRows, minBricksPerRow, maxWidthOfBri
 
     const brickGeom = new THREE.BoxGeometry(actualWidth, actualHeight, 1);
 
-    // how we know which rows to alternate
-    // since either even or odd will have an extra brick:
-    // extraOddBrick = 1 - extraEvenBrick
+    // how we know which rows to alternate since either even 
+    // or odd will have an extra brick: extraOddBrick = 1 - extraEvenBrick
     let extraEvenBrick = 1;
 
     // randomly chooses whether even or odd rows have more bricks
@@ -45,8 +51,6 @@ let populateWithBlocks = function(scene, numRows, minBricksPerRow, maxWidthOfBri
         extraEvenBrick = 0;
 
     for (let i = 0; i < numRows; i++) {
-        // let rowOfBricks = [];
-
         let numBricks = minBricksPerRow;
 
         // makes sure we alternate number of bricks
@@ -80,11 +84,7 @@ let populateWithBlocks = function(scene, numRows, minBricksPerRow, maxWidthOfBri
 
             const brick = new Brick(scene, COLORS[colorIndex], brickGeom, translateVec);
             totalBricks++;
-
-            // rowOfBricks.push(brick);
         }
-
-        // bricks.push(rowOfBricks);
     }
 
     return totalBricks;
@@ -110,22 +110,22 @@ let addBorders = function(scene, xDistance, yDistanceAbove, yDistanceBelow, bord
 
     // Add in the left border
     const leftTranslate = new THREE.Vector3(xDistance, yShift, 0);
-    const leftBorderMesh = new Border(scene, sideBorderGeom, leftTranslate)
+    const leftBorderMesh = new Border(scene, sideBorderGeom, "leftBorder", leftTranslate);
 
     // Add right border
     const rightTranslate = new THREE.Vector3(-xDistance, yShift, 0);
-    const rightBorderMesh = new Border(scene, sideBorderGeom, rightTranslate);
+    const rightBorderMesh = new Border(scene, sideBorderGeom, "rightBorder", rightTranslate);
 
     // add in the thickness here to acocunt for corners
     const horizontalBorderGeom = new THREE.BoxGeometry(xDistance * 2 + thickness, thickness, 1);
 
     // Add top border
     const topTranslate = new THREE.Vector3(0, yDistanceAbove, 0);
-    const topBorderMesh = new Border(scene, horizontalBorderGeom, topTranslate);
+    const topBorderMesh = new Border(scene, horizontalBorderGeom, "topBorder", topTranslate);
 
     // Add bottom border
     const bottomTranslate = new THREE.Vector3(0, yDistanceBelow, 0);
-    const bottomBorderMesh = new Border(scene, horizontalBorderGeom, bottomTranslate);
+    const bottomBorderMesh = new Border(scene, horizontalBorderGeom, "bottomBorder", bottomTranslate);
 
     // NOTE: this is a bit of a misnomer, these are border classes, use (name).mesh to access the mesh
     let borderMesh = {
@@ -152,21 +152,14 @@ class BreakoutScene extends Scene {
         this.background = new Color(0x7ec0ee);
 
         // Add the ball to the scene
-        const ball = new Ball(this, BLACK_SHADE);
+        // const ball = new Ball(this, BLACK_SHADE, new THREE.Vector3(0, 0, 0));
 
         const lights = new BasicLights();
 
         // how much space to leave betwen the origin and the start of blocks
         const SPACE_ABOVE_ORIGIN = 2;
-        // how much space to leave between origin and cursor
-        const SPACE_BELOW_ORIGIN = 2;
-
-        // Add in a platform object with this width and height
-        const PLATFORM_WIDTH = 5;
-        const PLATFORM_HEIGHT = 0.3;
-
-        const platform = new Platform(this, PLATFORM_COLOR, PLATFORM_WIDTH,
-            PLATFORM_HEIGHT, SPACE_BELOW_ORIGIN);
+        // how much space to leave between origin and platform
+        const SPACE_BELOW_ORIGIN = 1;
 
         // specifies size, num of rows and bricks we want
         const MAX_WIDTH_OF_BRICKS = 2;
@@ -174,11 +167,12 @@ class BreakoutScene extends Scene {
         const MAX_BRICKS_PER_ROW = 5;
         const NUM_ROWS = 3;
 
-        // bricks is the array of bricks we've created
-        let numBricks = populateWithBlocks(this, NUM_ROWS, MAX_BRICKS_PER_ROW - 1, MAX_WIDTH_OF_BRICKS,
-            MAX_HEIGHT_OF_BRICKS, SPACE_ABOVE_ORIGIN);
+        // needed for height of border
+        const PLATFORM_HEIGHT = 0.3;
 
-        this.userData.bricksLeft = numBricks;
+        // bricks is the array of bricks we've created
+        this.bricksLeft = populateWithBlocks(this, NUM_ROWS, MAX_BRICKS_PER_ROW - 1, MAX_WIDTH_OF_BRICKS,
+            MAX_HEIGHT_OF_BRICKS, SPACE_ABOVE_ORIGIN);
 
         let xDistance = (MAX_BRICKS_PER_ROW * MAX_WIDTH_OF_BRICKS)/2;
         let yDistanceAbove = MAX_HEIGHT_OF_BRICKS * NUM_ROWS + SPACE_ABOVE_ORIGIN;
@@ -188,9 +182,34 @@ class BreakoutScene extends Scene {
 
         // borderMesh holds all of the meshes that we created as borders
         let borderMesh =
-            addBorders(this, xDistance + OFFSET, yDistanceAbove + 2 * OFFSET, yDistanceBelow - OFFSET, BLACK_SHADE, 0.2);
+            addBorders(this, xDistance + OFFSET, yDistanceAbove + 2 * OFFSET,
+                yDistanceBelow - 2 * OFFSET, BLACK_SHADE, 0.2);
+
+        // Decide platform width based on how many bricks there are
+        const PLATFORM_WIDTH = Math.min((0.33 * MAX_WIDTH_OF_BRICKS * MAX_BRICKS_PER_ROW), 5);
+
+        this.platform = new Platform(this, PLATFORM_COLOR, PLATFORM_WIDTH,
+            PLATFORM_HEIGHT, SPACE_BELOW_ORIGIN);
+
+        // save the beginning platform position for this game
+        this.defaultPlatformPosition = this.platform.mesh.position.clone();
+
+        // Add the ball to the scene
+        const RADIUS = 0.3;
+
+        const translateVec = new THREE.Vector3(0, -SPACE_BELOW_ORIGIN + PLATFORM_HEIGHT/2 + RADIUS, 0);
+        const ball = new Ball(this, RADIUS, BLACK_SHADE, translateVec);
+
+        // Save the default position of ball for later
+        this.defaultBallPosition = ball.mesh.position.clone();
+
+        // set the number of lives to default at first
+        this.livesLeft = NUMBER_OF_LIVES;
 
         this.add(lights);
+
+        // listener can be found below
+        window.addEventListener("keydown", this.handleEvents);
     }
 
     // Call this with an object to make sure it updates every timeStamp
@@ -212,10 +231,38 @@ class BreakoutScene extends Scene {
      * reduces the number of overall bricks.
      */
     removeBrick(brick) {
-        this.userData.bricksLeft--;
+        this.bricksLeft--;
         brick.remove();
-        
+
         // TODO: end game when zero bricks left
+    }
+
+    /**
+     * Handles when the passed-in ball hits the bottom border
+     * of the game.
+    */
+     handleBallHittingBottom(ball) {
+        this.livesLeft--;
+        this.handleReset(ball);
+
+        // TODO: end game when you run out of lives
+    }
+
+    /**
+     * Resets the passed-in ball to starting position.
+     */
+    handleReset(ball) {
+        // adjust the ball so it stops moving and it returns to starting pos
+        let changeInBallPosition = new THREE.Vector3().addVectors(this.defaultBallPosition,
+            ball.mesh.position.clone().multiplyScalar(-1));
+
+        ball.mesh.position.add(changeInBallPosition);
+        ball.moving = false;
+
+        // move platform back to starting position
+        let changeInPlatformPosition = new THREE.Vector3().addVectors(this.defaultPlatformPosition,
+            this.platform.mesh.position.clone().multiplyScalar(-1));
+        this.platform.mesh.position.add(changeInPlatformPosition);
     }
 }
 

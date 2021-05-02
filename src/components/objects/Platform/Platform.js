@@ -34,11 +34,11 @@ class Platform extends Group {
             }
 
             if (event.key == "ArrowLeft"){
-                platform.translateX(.15);
+                platform.translateX(0.15);
             }
             else if (event.key == "ArrowRight"){
-                platform.translateX(-.15);
-            }
+                platform.translateX(-0.15);
+            } 
             else return;
         }
 

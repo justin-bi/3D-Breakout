@@ -4,7 +4,7 @@ import * as THREE from 'three'
 
 // Implements a border wall around the game
 class Border extends Group {
-    constructor(parent, geom, translateVec) {
+    constructor(parent, geom, name, translateVec) {
         // Call parent Group() constructor
         super();
 
@@ -20,7 +20,7 @@ class Border extends Group {
         this.mesh = new THREE.Mesh(geom, borderMat);
         // Translates the vec at the starting position, maybe put this in its own function
         this.mesh.position.add(translateVec);
-        this.mesh.name = "border";
+        this.mesh.name = name;
         parent.add(this.mesh);
 
         // Add self to parent's update list
