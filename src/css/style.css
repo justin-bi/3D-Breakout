@@ -25,6 +25,13 @@
     text-align: center;
 }
 
+#instructions-container p {
+    font-family: 'Open Sans' !important;
+    font-style: italic;
+    color: white;
+}
+
+
 #instructions-container h1 {
   font-size: 1.5vw;
   color: white;
@@ -37,11 +44,12 @@
 #instructions-container {
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 0, 0, 0.5);
     height: 50vh;
     width: 20vw;
     position: absolute;
     top: 30vh;
     left: 40vw;
-    display: flex;
+    padding-top: 3vh;
+    padding-left: 3vh;
 }

@@ -74,3 +74,13 @@ document.body.appendChild(instructionsContainer);
 let instructionsTitle = document.createElement('h1');
 instructionsTitle.innerText = "INSTRUCTIONS";
 instructionsContainer.appendChild(instructionsTitle);
+
+
+
+let instructionsText = document.createElement('p');
+instructionsText.innerHTML = "&#8593;: Start <br> <br>" +
+                              "&#8592;: Move the platform left <br> <br>" +
+                              "&#8594;: Move the platform right <br> <br>" +
+                              "P: Pause <br> <br>" +
+                              "Mouse: Move the camera";
+instructionsContainer.appendChild(instructionsText);
