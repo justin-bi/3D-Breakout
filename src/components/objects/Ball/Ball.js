@@ -7,7 +7,7 @@ import { Brick } from 'objects';
 let ballI = 0;
 
 class Ball extends Group {
-    constructor(parent, color) {
+    constructor(parent, radius, color, translateVec) {
         // Call parent Group() constructor
         super();
 
@@ -17,25 +17,48 @@ class Ball extends Group {
             vel: new THREE.Vector3(0, -0.05, 0),
         };
 
-        const geometry = new THREE.SphereGeometry(0.3, 8, 8);
+        const geometry = new THREE.SphereGeometry(radius, 8, 8);
         const material = new THREE.MeshPhongMaterial(
             {
                 color: color,
                 flatShading: true
             }
         );
+
+        // keeps track of whether ball is moving
+        this.moving = false;
+
         this.mesh = new THREE.Mesh(geometry, material);
 
         this.mesh.name = 'ball';
         this.parent = parent;
 
+        this.mesh.position.add(translateVec);
+
         // add a reference to the ball object to its mesh
         this.mesh.userData.ball = this;
 
+        // Add self to parent scene
         parent.add(this.mesh);
-
         // Add self to parent's update list
         parent.addToUpdateList(this);
+
+        var ball = this;
+
+        let handleBallEvent = function(event) {
+            // Ignore keypresses typed into a text box
+            if (event.target.tagName === "INPUT") {
+                return;
+            }
+
+            // start ball moving
+            if (event.key == "ArrowUp"){
+                ball.moving = true;
+            }
+            else return;
+        };
+
+        window.addEventListener("keydown", handleBallEvent);
     }
 
     // Not needed, but just wanted to keep this code somewhere such that we don't need to completley  
@@ -61,6 +84,9 @@ class Ball extends Group {
     // }
 
     update(timeStamp) {
+        // if the ball has not begun moving, do not start yet
+        if (!this.moving) return;
+
         this.mesh.position.y += this.state.vel.y;
         // Just bounce up and down for now
         // if (this.mesh.position.y > -1 && this.mesh.position.y < 3) {
@@ -94,6 +120,8 @@ class Ball extends Group {
 
                 if (object.name === "brick") {
                     this.mesh.parent.removeBrick(object.userData.brick);
+                } else if (object.name === "bottomBorder") {
+                    this.mesh.parent.handleBallHittingBottom(this);
                 }
 
                 // Need this mult factor, otherwise it gets stuck, lower values don't work when it directly
