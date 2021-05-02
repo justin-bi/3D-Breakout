@@ -4,7 +4,7 @@ import { TWEEN } from 'three/examples/jsm/libs/tween.module.min.js';
 import * as THREE from 'three'; // Probably need to change later, doing this for now for simplicity
 
 class Platform extends Group {
-    constructor(parent, color, width, height, yPosition) {
+    constructor(parent, color, width, height, yPosition, xDistance) {
         // Call parent Group() constructor
         super();
 
@@ -13,6 +13,7 @@ class Platform extends Group {
             // Empty for now, can populate later if wanted
         };
 
+        this.xDist = xDistance
         this.name = 'paddle';
 
         const geometry = new THREE.BoxGeometry(width, height, 1);
@@ -28,16 +29,19 @@ class Platform extends Group {
         parent.add(this.mesh);
 
         let handlePlatformEvents = function(event) {
+            this.speed = 0.5
             // Ignore keypresses typed into a text box
             if (event.target.tagName === "INPUT") {
                 return;
             }
 
-            if (event.key == "ArrowLeft"){
-                platform.translateX(0.15);
+            if (event.key == "ArrowLeft"){  
+                platform.translateX(-this.speed);
+                let xPos = platform.position.x
+                // if (xPos + width / 2 >= )
             }
             else if (event.key == "ArrowRight"){
-                platform.translateX(-0.15);
+                platform.translateX(this.speed);
             } 
             else return;
         }
@@ -45,29 +49,8 @@ class Platform extends Group {
         window.addEventListener("keydown", handlePlatformEvents);
     }
 
-    // Not needed, but just wanted to keep this code somewhere such that we don't need to completley
-    // spin() {
-    //     // Add a simple twirl
-    //     this.state.twirl += 6 * Math.PI;
-
-    //     // Use timing library for more precice "bounce" animation
-    //     // TweenJS guide: http://learningthreejs.com/blog/2011/08/17/tweenjs-for-smooth-animation/
-    //     // Possible easings: http://sole.github.io/tween.js/examples/03_graphs.html
-    //     const jumpUp = new TWEEN.Tween(this.position)
-    //         .to({ y: this.position.y + 1 }, 300)
-    //         .easing(TWEEN.Easing.Quadratic.Out);
-    //     const fallDown = new TWEEN.Tween(this.position)
-    //         .to({ y: 0 }, 300)
-    //         .easing(TWEEN.Easing.Quadratic.In);
-
-    //     // Fall down after jumping up
-    //     jumpUp.onComplete(() => fallDown.start());
-
-    //     // Start animation
-    //     jumpUp.start();
-    // }
-
     update(timeStamp) {
+
     }
 }
 

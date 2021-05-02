@@ -108,6 +108,7 @@ class Ball extends Group {
             // If the ray collides with something, and the first collision (sorted in order of distance)
             // is less than the distance to the edge of the mesh itself, got a collision
             if (collisionResults.length > 0 && collisionResults[0].distance < dirVec.length()) {
+                console.log(collisionResults[0])
 
                 // The object the ball collides with
                 const object = collisionResults[0].object;
@@ -145,8 +146,7 @@ class Ball extends Group {
                 if (object.name === "brick") {
                     this.mesh.parent.removeBrick(object.userData.brick);
                 } else if (object.name === "bottomBorder") {
-                    // UNCOMMENT THIS LATER, just commented for now to test the ball bounce
-                    // this.mesh.parent.handleBallHittingBottom(this); 
+                    this.mesh.parent.handleBallHittingBottom(this); 
                 }
 
                 break;

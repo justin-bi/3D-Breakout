@@ -189,7 +189,7 @@ class BreakoutScene extends Scene {
         const PLATFORM_WIDTH = Math.min((0.33 * MAX_WIDTH_OF_BRICKS * MAX_BRICKS_PER_ROW), 5);
 
         this.platform = new Platform(this, PLATFORM_COLOR, PLATFORM_WIDTH,
-            PLATFORM_HEIGHT, SPACE_BELOW_ORIGIN);
+            PLATFORM_HEIGHT, SPACE_BELOW_ORIGIN, xDistance);    // Pass in xDistance to set limits
 
         // save the beginning platform position for this game
         this.defaultPlatformPosition = this.platform.mesh.position.clone();
