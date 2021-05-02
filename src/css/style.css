@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+* {
+    font-family: 'Press Start 2P' !important;
+}
+
+#title-container {
+    justify-content: center;
+    align-items: center;
+    height: 15vh;
+    min-width: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    display: flex;
+}
+
+#title-container h1{
+    font-size: 50px;
+    color: white;
+    padding: 0px;
+    margin: 0px;
+    text-shadow: 5px 5px darkgreen;
+    text-align: center;
+}

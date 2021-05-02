@@ -9,6 +9,7 @@
 import { WebGLRenderer, PerspectiveCamera, Vector3 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { BreakoutScene } from './components/scenes';
+import './css/style.css'
 
 // Initialize core ThreeJS components
 const scene = new BreakoutScene();
@@ -54,3 +55,13 @@ const windowResizeHandler = () => {
 };
 windowResizeHandler();
 window.addEventListener('resize', windowResizeHandler, false);
+
+
+// make title
+let titleContainer = document.createElement('div');
+titleContainer.id = "title-container";
+document.body.appendChild(titleContainer);
+
+let titleText = document.createElement('h1');
+titleText.innerText = "3D Breakout";
+titleContainer.appendChild(titleText);
