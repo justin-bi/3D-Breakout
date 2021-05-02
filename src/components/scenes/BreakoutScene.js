@@ -1,7 +1,7 @@
 import * as Dat from 'dat.gui';
 import { Scene, Color } from 'three';
 // import { Flower, Land } from 'objects';
-import { Ball, Border, Brick } from 'objects';
+import { Ball, Border, Brick, Heart } from 'objects';
 import { Platform } from 'objects';
 import { BasicLights } from 'lights';
 import * as THREE from 'three' 
@@ -174,13 +174,16 @@ class BreakoutScene extends Scene {
         let xDistance = (MAX_BRICKS_PER_ROW * MAX_WIDTH_OF_BRICKS)/2;
         let yDistanceAbove = MAX_HEIGHT_OF_BRICKS * NUM_ROWS + SPACE_ABOVE_ORIGIN;
         let yDistanceBelow =  -(SPACE_BELOW_ORIGIN + PLATFORM_HEIGHT);
+
+        // thickness of border
+        const THICKNESS = 0.2;
         // the offset to ensure that the border doesn't intersect with the bricks
         const OFFSET = 0.3;
 
         // borderMesh holds all of the meshes that we created as borders
         let borderMesh =
             addBorders(this, xDistance + OFFSET, yDistanceAbove + 2 * OFFSET,
-                yDistanceBelow - 2 * OFFSET, BLACK_SHADE, 0.2);
+                yDistanceBelow - 2 * OFFSET, BLACK_SHADE, THICKNESS);
 
         // Decide platform width based on how many bricks there are
         const PLATFORM_WIDTH = Math.min((0.33 * MAX_WIDTH_OF_BRICKS * MAX_BRICKS_PER_ROW), 5);
@@ -197,13 +200,31 @@ class BreakoutScene extends Scene {
         const translateVec = new THREE.Vector3(0, -SPACE_BELOW_ORIGIN + PLATFORM_HEIGHT/2 + RADIUS, 0);
         const ball = new Ball(this, RADIUS, BLACK_SHADE, translateVec);
 
+        this.balls = [];
+        this.balls.push(ball);
+
         // Save the default position of ball for later
         this.defaultBallPosition = ball.mesh.position.clone();
 
         // set the number of lives to default at first
         this.livesLeft = NUMBER_OF_LIVES;
+
+        // add hearts which represent lives to scene
+        let hearts = [];
+        let xSpace = 1;
+
+        for (let i = 0; i < this.livesLeft; i++) {
+            hearts.push(new Heart(this, 0xE44E5A, (xDistance + OFFSET)/2 + i * xSpace,
+                yDistanceAbove + 2 * OFFSET + PLATFORM_HEIGHT
+                + THICKNESS + OFFSET * 2, 0.03));
+        }
+
+        this.hearts = hearts;
+
         // keep track of whether it's in play (it is when at least one ball is moving)
         this.inPlay = false;
+        // is the game over?
+        this.gameOver = false;
 
         this.add(lights);
 
@@ -233,18 +254,26 @@ class BreakoutScene extends Scene {
         this.bricksLeft--;
         brick.remove();
 
+        if (this.bricksLeft <= 0) this.endGame();
         // TODO: end game when zero bricks left
     }
 
     /**
      * Handles when the passed-in ball hits the bottom border
-     * of the game.
+     * of the game. This is equivalent to losing a life, and
+     * as such, we reduce the number of lives, and
+     * their visual representation, hearts.
     */
-     handleBallHittingBottom(ball) {
+    handleBallHittingBottom(ball) {
         this.livesLeft--;
+
+        // hearts should be removed in reverse order than
+        // they were added
+        let current = NUMBER_OF_LIVES - this.livesLeft - 1;
+        this.hearts[current].remove();
         this.handleReset(ball);
 
-        // TODO: end game when you run out of lives
+        if (this.livesLeft <= 0) this.endGame();
     }
 
     /**
@@ -263,6 +292,17 @@ class BreakoutScene extends Scene {
         let changeInPlatformPosition = new THREE.Vector3().addVectors(this.defaultPlatformPosition,
             this.platform.mesh.position.clone().multiplyScalar(-1));
         this.platform.mesh.position.add(changeInPlatformPosition);
+    }
+
+    endGame() { 
+        this.inPlay = false;
+        this.gameOver = true;
+
+        for (let i = 0; i < this.balls.length; i++) {
+            this.balls[i].moving = false;
+        }
+
+        // TODO: go to end screen
     }
 }
 
