@@ -54,11 +54,13 @@ class Ball extends Group {
                 return;
             }
 
-            // if the game is over you shouldn't be able to start again
-            if (parent.gameOver) return;
+            // if the game is paused or over, you shouldn't be able to start again
+            if (parent.paused || parent.gameOver) return;
 
             // start ball moving
             if (event.key == "ArrowUp"){
+                parent.ballStarted = true;
+
                 ball.moving = true;
                 parent.inPlay = true;
             }
@@ -119,7 +121,7 @@ class Ball extends Group {
 
                 // If it collided, first move it back to its position BEFORE the collisions, guaranteed to not be in a 
                 // collision at this point
-                this.mesh.position.sub(this.state.vel)
+                this.mesh.position.sub(this.state.vel);
 
                 // The object the ball collides with
                 const object = collisionResults[0].object;
@@ -132,20 +134,19 @@ class Ball extends Group {
                 // so to calculate which way its angle should go, find the angle of the dirVec that caused the 
                 // collision. Then, if it's within a certain range, cause it to reflect a certain way. 
                 let angle = dirVec.clone().angleTo(new THREE.Vector3(1, 0, 0)) / Math.PI * 180 // Converting to degrees is easier
-                console.log(angle)
 
                 // First, handle cases where the ball collides mostly on the left or right
                 if (angle < 30 || (angle >= 150 && angle < 210) || angle >= 330) {
-                    this.state.vel.x *= -1
+                    this.state.vel.x *= -1;
                 } 
                 // Otherwise, handle cases where it mostly bounces top or bottom
                 else if ((angle >= 60 && angle < 120) || (angle >= 240 && angle < 300)) { 
-                    this.state.vel.y *= -1
+                   this.state.vel.y *= -1;
                 } 
                 // Else, we assume it mostly bounced off a corner and reflect both
                 else {
-                    this.state.vel.y *= -1
-                    this.state.vel.x *= -1
+                    this.state.vel.y *= -1;
+                    this.state.vel.x *= -1;
                 }
 
                 if (object.name === "paddle") {
@@ -153,16 +154,17 @@ class Ball extends Group {
                     // the paddle it should change angle towards that direction, if the paddle is moving towards it
                     // the ball should move in the same direction, etc. 
                     // this.mesh.position.sub(object.position.)
-                    let platTop = object.position.clone().add(new THREE.Vector3(0, object.geometry.parameters.height, 0))
+                    // let platTop = object.position.clone()
+                    //     .add(new THREE.Vector3(0, , 0))
                     // console.log('platTop', platTop)
-                    // console.log(this.mesh.position)
+                    this.mesh.position.y = object.position.y + object.geometry.parameters.height + this.mesh.geometry.parameters.radius
                     // console.log(object.position)
                     // console.log('height', object.geometry.parameters.height)
                     
                 }
 
                 // Do this hack for now
-                this.mesh.position.add(this.state.vel)
+                this.mesh.position.add(this.state.vel);
 
                 if (object.name === "brick") {
                     this.mesh.parent.removeBrick(object.userData.brick);

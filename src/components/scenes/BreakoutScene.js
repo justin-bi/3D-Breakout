@@ -223,15 +223,38 @@ class BreakoutScene extends Scene {
 
         // keep track of whether it's in play (it is when at least one ball is moving)
         this.inPlay = false;
+        // has the ball started (we've hit the arrow up key)?
+        this.ballStarted = false;
+        // game paused 
+        this.paused = false;
+
         // did the player win?
         this.gameWon = false;
-        // is the game over?
+        // has the game ended?
         this.gameOver = false;
 
         this.add(lights);
 
+        var scene = this;
+
+        let handleKeydownEvent = function(event) {
+            // Ignore keypresses typed into a text box
+            if (event.target.tagName === "INPUT") {
+                return;
+            }
+
+            // should only pause during a game
+            if (!scene.ballStarted || scene.gameOver) return;
+
+            // start ball moving
+            if (event.key == "p"){
+                scene.handlePause();
+            }
+            else return;
+        }
+
         // listener can be found below
-        window.addEventListener("keydown", this.handleEvents);
+        window.addEventListener("keydown", handleKeydownEvent);
     }
 
     // Call this with an object to make sure it updates every timeStamp
@@ -263,6 +286,27 @@ class BreakoutScene extends Scene {
     }
 
     /**
+     * Pauses the current scene.
+     */
+    handlePause() {
+        if (!this.paused) {
+            this.paused = true;
+            this.inPlay = false;
+
+            for (let i = 0; i < this.balls.length; i++) {
+                this.balls[i].moving = false;
+            }
+        } else {
+            this.paused = false;
+            this.inPlay = true;
+
+            for (let i = 0; i < this.balls.length; i++) {
+                this.balls[i].moving = true;
+            }
+        }
+    }
+
+    /**
      * Handles when the passed-in ball hits the bottom border
      * of the game. This is equivalent to losing a life, and
      * as such, we reduce the number of lives, and
@@ -275,9 +319,12 @@ class BreakoutScene extends Scene {
         // they were added
         let current = NUMBER_OF_LIVES - this.livesLeft - 1;
         this.hearts[current].remove();
-        this.handleReset(ball);
 
-        if (this.livesLeft <= 0) this.endGame();
+        if (this.livesLeft <= 0) {
+            return this.endGame();
+        }
+
+        this.handleReset(ball);
     }
 
     /**
@@ -292,6 +339,7 @@ class BreakoutScene extends Scene {
         ball.mesh.position.add(changeInBallPosition);
         ball.moving = false;
         this.inPlay = false;
+        this.ballStarted = false;
 
         // move platform back to starting position
         let changeInPlatformPosition = new THREE.Vector3().addVectors(this.defaultPlatformPosition,
