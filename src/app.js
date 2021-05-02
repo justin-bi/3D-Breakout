@@ -75,12 +75,47 @@ let instructionsTitle = document.createElement('h1');
 instructionsTitle.innerText = "INSTRUCTIONS";
 instructionsContainer.appendChild(instructionsTitle);
 
-
-
 let instructionsText = document.createElement('p');
-instructionsText.innerHTML = "&#8593;: Start <br> <br>" +
-                              "&#8592;: Move the platform left <br> <br>" +
-                              "&#8594;: Move the platform right <br> <br>" +
-                              "P: Pause <br> <br>" +
-                              "Mouse: Move the camera";
+instructionsText.innerHTML = "";
 instructionsContainer.appendChild(instructionsText);
+
+let table = document.createElement('table');
+instructionsContainer.appendChild(table);
+
+let up = table.insertRow();
+up.insertCell(0).innerHTML = "&#8593;";
+up.insertCell(1).innerHTML = "START/RESUME";
+
+let left = table.insertRow();
+left.insertCell(0).innerHTML = "&#8592;";
+left.insertCell(1).innerHTML = "Move the platform left";
+
+let right = table.insertRow();
+right.insertCell(0).innerHTML = "&#8594;";
+right.insertCell(1).innerHTML = "Move the platform right";
+
+let pause = table.insertRow();
+pause.insertCell(0).innerHTML = "P";
+pause.insertCell(1).innerHTML = "Pause the game";
+
+let mouse = table.insertRow();
+mouse.insertCell(0).innerHTML = "Mouse";
+mouse.insertCell(1).innerHTML = "Move the camera";
+
+
+// instructionsContainer.style.visibility = 'hidden';
+let handlePlayerEvent = function(event) {
+  // Ignore keypresses typed into a text box
+  if (event.target.tagName === "INPUT") {
+      return;
+  }
+
+  if (event.key == "ArrowUp") {
+    instructionsContainer.style.visibility = 'hidden';
+  }
+  else if (event.key == "p") {
+    instructionsContainer.style.visibility = 'visible';
+  }
+}
+
+window.addEventListener("keydown", handlePlayerEvent);
