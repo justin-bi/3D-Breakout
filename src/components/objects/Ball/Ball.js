@@ -98,7 +98,7 @@ class Ball extends Group {
         // Code from here: https://stackoverflow.com/questions/11473755/how-to-detect-collision-in-three-js
         // Open to ideas, since this seems a tad complex
         let pos = this.mesh.position.clone();
-        let EPSILON = 0.01;
+        let EPSILON = 0.05;
 
         for (let vi = 0; vi < this.mesh.geometry.vertices.length; vi++) {
             let localVert = this.mesh.geometry.vertices[vi];
