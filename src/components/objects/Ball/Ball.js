@@ -98,6 +98,7 @@ class Ball extends Group {
         // Code from here: https://stackoverflow.com/questions/11473755/how-to-detect-collision-in-three-js
         // Open to ideas, since this seems a tad complex
         let pos = this.mesh.position.clone();
+        let EPSILON = 0.01;
 
         for (let vi = 0; vi < this.mesh.geometry.vertices.length; vi++) {
             let localVert = this.mesh.geometry.vertices[vi];
@@ -111,7 +112,7 @@ class Ball extends Group {
 
             // If the ray collides with something, and the first collision (sorted in order of distance)
             // is less than the distance to the edge of the mesh itself, got a collision
-            if (collisionResults.length > 0 && collisionResults[0].distance < dirVec.length()) {
+            if (collisionResults.length > 0 && collisionResults[0].distance < dirVec.length() + EPSILON) {
 
                 // The object the ball collides with
                 const object = collisionResults[0].object;
