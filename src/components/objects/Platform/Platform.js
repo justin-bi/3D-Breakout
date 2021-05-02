@@ -25,6 +25,7 @@ class Platform extends Group {
         // add a reference to the platform object to its mesh
         this.mesh.userData.platform = this;
 
+        var ball = parent.ball;
         var platform = this.mesh;
         platform.xDist = xDistance;
         parent.add(this.mesh);
@@ -35,6 +36,9 @@ class Platform extends Group {
             if (event.target.tagName === "INPUT") {
                 return;
             }
+
+            // don't move platform unless at least one ball is moving
+            if (!parent.inPlay) return;
 
             if (event.key == "ArrowLeft"){  
                 platform.translateX(-this.speed);

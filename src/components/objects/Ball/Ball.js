@@ -54,6 +54,7 @@ class Ball extends Group {
             // start ball moving
             if (event.key == "ArrowUp"){
                 ball.moving = true;
+                parent.inPlay = true;
             }
             else return;
         };
