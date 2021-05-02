@@ -205,6 +205,8 @@ class BreakoutScene extends Scene {
 
         // set the number of lives to default at first
         this.livesLeft = NUMBER_OF_LIVES;
+        // keep track of whether it's in play (it is when at least one ball is moving)
+        this.inPlay = false;
 
         this.add(lights);
 
@@ -258,6 +260,7 @@ class BreakoutScene extends Scene {
 
         ball.mesh.position.add(changeInBallPosition);
         ball.moving = false;
+        this.inPlay = false;
 
         // move platform back to starting position
         let changeInPlatformPosition = new THREE.Vector3().addVectors(this.defaultPlatformPosition,
