@@ -24,3 +24,24 @@
     text-shadow: 5px 5px darkgreen;
     text-align: center;
 }
+
+#instructions-container h1 {
+  font-size: 1.5vw;
+  color: white;
+  padding: 0px;
+  margin: 0px;
+  text-shadow: 5px 5px blue;
+  text-align: center;
+}
+
+#instructions-container {
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.7);
+    height: 50vh;
+    width: 20vw;
+    position: absolute;
+    top: 30vh;
+    left: 40vw;
+    display: flex;
+}

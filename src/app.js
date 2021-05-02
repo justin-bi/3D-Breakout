@@ -63,5 +63,14 @@ titleContainer.id = "title-container";
 document.body.appendChild(titleContainer);
 
 let titleText = document.createElement('h1');
-titleText.innerText = "3D Breakout";
+titleText.innerText = "3D BREAKOUT";
 titleContainer.appendChild(titleText);
+
+// make instructions
+let instructionsContainer = document.createElement('div');
+instructionsContainer.id = "instructions-container";
+document.body.appendChild(instructionsContainer);
+
+let instructionsTitle = document.createElement('h1');
+instructionsTitle.innerText = "INSTRUCTIONS";
+instructionsContainer.appendChild(instructionsTitle);
