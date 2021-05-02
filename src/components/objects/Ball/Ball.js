@@ -134,7 +134,6 @@ class Ball extends Group {
                 // so to calculate which way its angle should go, find the angle of the dirVec that caused the 
                 // collision. Then, if it's within a certain range, cause it to reflect a certain way. 
                 let angle = dirVec.clone().angleTo(new THREE.Vector3(1, 0, 0)) / Math.PI * 180 // Converting to degrees is easier
-                console.log(angle)
 
                 // First, handle cases where the ball collides mostly on the left or right
                 if (angle < 30 || (angle >= 150 && angle < 210) || angle >= 330) {
@@ -155,9 +154,9 @@ class Ball extends Group {
                     // the paddle it should change angle towards that direction, if the paddle is moving towards it
                     // the ball should move in the same direction, etc. 
                     // this.mesh.position.sub(object.position.)
-                    console.log(this.mesh.position)
-                    console.log(object.position)
-                    console.log('height', object.geometry.parameters.height)
+                    // console.log(this.mesh.position)
+                    // console.log(object.position)
+                    // console.log('height', object.geometry.parameters.height)
                     
                 }
 
