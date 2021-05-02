@@ -14,7 +14,7 @@ class Ball extends Group {
         // Init state
         this.state = {
             // The direction of the ball, start by just going straight down
-            vel: new THREE.Vector3(0, -0.05, 0),
+            vel: new THREE.Vector3(0.01, -0.07, 0),
         };
 
         const geometry = new THREE.SphereGeometry(0.3, 8, 8);
@@ -61,7 +61,8 @@ class Ball extends Group {
     // }
 
     update(timeStamp) {
-        this.mesh.position.y += this.state.vel.y;
+        this.mesh.position.add(this.state.vel)
+        // this.mesh.position.y += this.state.vel.y;
         // Just bounce up and down for now
         // if (this.mesh.position.y > -1 && this.mesh.position.y < 3) {
         //     this.mesh.position.y += this.state.vel.y
@@ -87,10 +88,19 @@ class Ball extends Group {
             // If the ray collides with something, and the first collision (sorted in order of distance)
             // is less than the distance to the edge of the mesh itself, got a collision
             if (collisionResults.length > 0 && collisionResults[0].distance < dirVec.length()) {
+
+                // The object the ball collides with
+                const object = collisionResults[0].object;
+
+                // Everything that the ball bounces off of is a box mesh (hopefully it stays that way haha),
+                // so to calculate which way its angle should go, determine the normal of the plane it bounced 
+                // off of, then reflect the velocity off that normal
+                if (object.name === "border") {
+                    console.log(object)
+                }
+
                 // Right now this is assuming it just switches y direction, need to add in angle factor later
                 this.state.vel.y *= -1;
-
-                const object = collisionResults[0].object;
 
                 if (object.name === "brick") {
                     this.mesh.parent.removeBrick(object.userData.brick);
