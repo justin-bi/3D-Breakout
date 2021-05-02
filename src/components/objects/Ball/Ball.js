@@ -14,7 +14,7 @@ class Ball extends Group {
         // Init state
         this.state = {
             // The direction of the ball, start by just going straight down
-            vel: new THREE.Vector3(0.05, 0.05, 0),
+            vel: new THREE.Vector3(-0.05, 0.05, 0),
         };
 
         const geometry = new THREE.SphereGeometry(radius, 8, 8);
@@ -117,7 +117,7 @@ class Ball extends Group {
 
             // If the ray collides with something, and the first collision (sorted in order of distance)
             // is less than the distance to the edge of the mesh itself, got a collision
-            if (collisionResults.length > 0 && collisionResults[0].distance < dirVec.length() + EPSILON) {
+            if (collisionResults.length > 0 && collisionResults[0].distance < dirVec.length()) {
 
                 // If it collided, first move it back to its position BEFORE the collisions, guaranteed to not be in a 
                 // collision at this point
@@ -134,6 +134,7 @@ class Ball extends Group {
                 // so to calculate which way its angle should go, find the angle of the dirVec that caused the 
                 // collision. Then, if it's within a certain range, cause it to reflect a certain way. 
                 let angle = dirVec.clone().angleTo(new THREE.Vector3(1, 0, 0)) / Math.PI * 180 // Converting to degrees is easier
+                console.log(angle)
 
                 // First, handle cases where the ball collides mostly on the left or right
                 if (angle < 30 || (angle >= 150 && angle < 210) || angle >= 330) {
@@ -153,41 +154,15 @@ class Ball extends Group {
                     // Note that it should do something special for the paddle, eg if it hits a certain area of 
                     // the paddle it should change angle towards that direction, if the paddle is moving towards it
                     // the ball should move in the same direction, etc. 
+                    // this.mesh.position.sub(object.position.)
+                    console.log(this.mesh.position)
+                    console.log(object.position)
+                    console.log('height', object.geometry.parameters.height)
+                    
                 }
 
                 // Do this hack for now
                 this.mesh.position.add(this.state.vel);
-
-                // We want to make sure that while the object still collides with this object, we keep moving it
-                
-                // let updateRay = new THREE.Raycaster();
-                // updateRay.set(this.mesh.position, dirVec.clone().normalize());
-                // let thisObjCollision = updateRay.intersectObject(object);
-                // console.log(thisObjCollision)
-                // console.log(this.mesh.geometry.boundingSphere)
-                // let i = 0
-                // while (thisObjCollision.length > 0 && thisObjCollision[0].distance < dirVec.length() && this.moving) {
-                //     updateRay.set(this.mesh.position, dirVec.clone().normalize());
-                //     // While more than one object is intersecting
-                //     if (i > 10) {
-                //         break
-                //     }
-                //     thisObjCollision = updateRay.intersectObject(object);
-                //     this.mesh.position.add(this.state.vel.clone().multiplyScalar(1))
-                //     console.log('here')
-                //     // this.mesh.position.add(new THREE.Vector3(1, 1, 0))
-                //     i++
-                // }
-
-                // this.mesh.geometry.computeBoundingSphere()
-                // let boundSphere = this.mesh.geometry.boundingSphere
-                // boundSphere.center.add(this.mesh.position)
-                // object.geometry.computeBoundingBox()
-                // let boundBox = object.geometry.boundingBox
-                // boundBox.min.add(object.position)
-                // boundBox.max.add(object.position)
-                // console.log(boundSphere.intersectsBox(boundBox))
-                // console.log(boundSphere, boundBox)
 
                 if (object.name === "brick") {
                     this.mesh.parent.removeBrick(object.userData.brick);
