@@ -14,7 +14,7 @@ class Ball extends Group {
         // Init state
         this.state = {
             // The direction of the ball, start by just going straight down
-            vel: new THREE.Vector3(0.05, -0.05, 0),
+            vel: new THREE.Vector3(0.05, 0.05, 0),
         };
 
         const geometry = new THREE.SphereGeometry(radius, 8, 8);
@@ -28,7 +28,10 @@ class Ball extends Group {
         // keeps track of whether ball is moving
         this.moving = false;
 
+
         this.mesh = new THREE.Mesh(geometry, material);
+        // Get a better starting position
+        this.mesh.position.add(new THREE.Vector3(0, 0.1, 0))
 
         this.mesh.name = 'ball';
         this.parent = parent;
@@ -114,6 +117,10 @@ class Ball extends Group {
             // is less than the distance to the edge of the mesh itself, got a collision
             if (collisionResults.length > 0 && collisionResults[0].distance < dirVec.length() + EPSILON) {
 
+                // If it collided, first move it back to its position BEFORE the collisions, guaranteed to not be in a 
+                // collision at this point
+                this.mesh.position.sub(this.state.vel)
+
                 // The object the ball collides with
                 const object = collisionResults[0].object;
 
@@ -147,7 +154,7 @@ class Ball extends Group {
                 }
 
                 // Do this hack for now
-                this.mesh.position.add(this.state.vel.clone().multiplyScalar(2))
+                this.mesh.position.add(this.state.vel)
 
                 // We want to make sure that while the object still collides with this object, we keep moving it
                 
@@ -179,7 +186,6 @@ class Ball extends Group {
                 // boundBox.max.add(object.position)
                 // console.log(boundSphere.intersectsBox(boundBox))
                 // console.log(boundSphere, boundBox)
-                this.mesh.position.add(this.state.vel.clone().multiplyScalar(2));
 
                 if (object.name === "brick") {
                     this.mesh.parent.removeBrick(object.userData.brick);

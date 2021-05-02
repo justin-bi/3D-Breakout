@@ -281,6 +281,7 @@ class BreakoutScene extends Scene {
      */
     handleReset(ball) {
         // adjust the ball so it stops moving and it returns to starting pos
+        // Need to do it this way since mesh.position is readOnly
         let changeInBallPosition = new THREE.Vector3().addVectors(this.defaultBallPosition,
             ball.mesh.position.clone().multiplyScalar(-1));
 
