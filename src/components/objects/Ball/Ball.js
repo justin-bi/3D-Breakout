@@ -141,18 +141,39 @@ class Ball extends Group {
                     // the ball should move in the same direction, etc. 
                 }
 
-                // Need this mult factor, otherwise it gets stuck, lower values don't work when it directly
-                // hits the middle of two blocks, but this might change when we add in brick removal
+                // Do this hack for now
+                this.mesh.position.add(this.state.vel.clone().multiplyScalar(2))
 
                 // We want to make sure that while the object still collides with this object, we keep moving it
-                // let thisObjCollision = rayCast.intersectObjects([object, this]);
+                
+                // let updateRay = new THREE.Raycaster();
+                // updateRay.set(this.mesh.position, dirVec.clone().normalize());
+                // let thisObjCollision = updateRay.intersectObject(object);
                 // console.log(thisObjCollision)
-                // while (thisObjCollision.length > 1 && thisObjCollision[0].length < dirVec.length()) {
+                // console.log(this.mesh.geometry.boundingSphere)
+                // let i = 0
+                // while (thisObjCollision.length > 0 && thisObjCollision[0].distance < dirVec.length() && this.moving) {
+                //     updateRay.set(this.mesh.position, dirVec.clone().normalize());
                 //     // While more than one object is intersecting
-                //     this.mesh.position.add(this.state.vel.clone().multiplyScalar(2))
+                //     if (i > 10) {
+                //         break
+                //     }
+                //     thisObjCollision = updateRay.intersectObject(object);
+                //     this.mesh.position.add(this.state.vel.clone().multiplyScalar(1))
+                //     console.log('here')
+                //     // this.mesh.position.add(new THREE.Vector3(1, 1, 0))
+                //     i++
                 // }
 
-                this.mesh.position.add(this.state.vel.clone().multiplyScalar(2))
+                // this.mesh.geometry.computeBoundingSphere()
+                // let boundSphere = this.mesh.geometry.boundingSphere
+                // boundSphere.center.add(this.mesh.position)
+                // object.geometry.computeBoundingBox()
+                // let boundBox = object.geometry.boundingBox
+                // boundBox.min.add(object.position)
+                // boundBox.max.add(object.position)
+                // console.log(boundSphere.intersectsBox(boundBox))
+                // console.log(boundSphere, boundBox)
 
                 if (object.name === "brick") {
                     this.mesh.parent.removeBrick(object.userData.brick);

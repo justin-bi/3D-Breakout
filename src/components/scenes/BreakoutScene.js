@@ -151,9 +151,6 @@ class BreakoutScene extends Scene {
         // Set background to a nice color
         this.background = new Color(0x7ec0ee);
 
-        // Add the ball to the scene
-        // const ball = new Ball(this, BLACK_SHADE, new THREE.Vector3(0, 0, 0));
-
         const lights = new BasicLights();
 
         // how much space to leave betwen the origin and the start of blocks
