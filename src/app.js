@@ -66,19 +66,22 @@ let titleText = document.createElement('h1');
 titleText.innerText = "3D BREAKOUT";
 titleContainer.appendChild(titleText);
 
-// make instructions
+// make instructions window
 let instructionsContainer = document.createElement('div');
 instructionsContainer.id = "instructions-container";
 document.body.appendChild(instructionsContainer);
 
+// make instructions title
 let instructionsTitle = document.createElement('h1');
 instructionsTitle.innerText = "INSTRUCTIONS";
 instructionsContainer.appendChild(instructionsTitle);
 
+// create a line break between title and content
 let instructionsText = document.createElement('p');
 instructionsText.innerHTML = "";
 instructionsContainer.appendChild(instructionsText);
 
+// make instructions table
 let table = document.createElement('table');
 instructionsContainer.appendChild(table);
 
@@ -102,8 +105,8 @@ let mouse = table.insertRow();
 mouse.insertCell(0).innerHTML = "Mouse";
 mouse.insertCell(1).innerHTML = "Move the camera";
 
-
-// instructionsContainer.style.visibility = 'hidden';
+// the instruction window disappears when the game is in play
+// and reappears when the game is paused
 let handlePlayerEvent = function(event) {
   // Ignore keypresses typed into a text box
   if (event.target.tagName === "INPUT") {
@@ -117,5 +120,4 @@ let handlePlayerEvent = function(event) {
     instructionsContainer.style.visibility = 'visible';
   }
 }
-
 window.addEventListener("keydown", handlePlayerEvent);
