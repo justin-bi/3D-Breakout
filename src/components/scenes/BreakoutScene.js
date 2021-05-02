@@ -223,6 +223,8 @@ class BreakoutScene extends Scene {
 
         // keep track of whether it's in play (it is when at least one ball is moving)
         this.inPlay = false;
+        // did the player win?
+        this.gameWon = false;
         // is the game over?
         this.gameOver = false;
 
@@ -254,8 +256,10 @@ class BreakoutScene extends Scene {
         this.bricksLeft--;
         brick.remove();
 
-        if (this.bricksLeft <= 0) this.endGame();
-        // TODO: end game when zero bricks left
+        if (this.bricksLeft <= 0) {
+            this.gameWon = true;
+            this.endGame();
+        }
     }
 
     /**
@@ -303,7 +307,7 @@ class BreakoutScene extends Scene {
             this.balls[i].moving = false;
         }
 
-        // TODO: go to end screen
+        // TODO: go to end screen & use gameWon to display who won
     }
 }
 
