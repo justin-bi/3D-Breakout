@@ -108,16 +108,18 @@ class Ball extends Group {
             // If the ray collides with something, and the first collision (sorted in order of distance)
             // is less than the distance to the edge of the mesh itself, got a collision
             if (collisionResults.length > 0 && collisionResults[0].distance < dirVec.length()) {
-                console.log(collisionResults[0])
 
                 // The object the ball collides with
                 const object = collisionResults[0].object;
+
+                // NOTE! All the bounce code below might be able to be improved, since collision results return the face that 
+                // it collided with, meaning we can use the normals. This method still works, but should it fail, might want 
+                // to look into that switch
 
                 // Everything that the ball bounces off of is a box mesh (hopefully it stays that way haha),
                 // so to calculate which way its angle should go, find the angle of the dirVec that caused the 
                 // collision. Then, if it's within a certain range, cause it to reflect a certain way. 
                 let angle = dirVec.clone().angleTo(new THREE.Vector3(1, 0, 0)) / Math.PI * 180 // Converting to degrees is easier
-                // console.log(angle)
 
                 // First, handle cases where the ball collides mostly on the left or right
                 if (angle < 30 || (angle >= 150 && angle < 210) || angle >= 330) {
@@ -141,6 +143,15 @@ class Ball extends Group {
 
                 // Need this mult factor, otherwise it gets stuck, lower values don't work when it directly
                 // hits the middle of two blocks, but this might change when we add in brick removal
+
+                // We want to make sure that while the object still collides with this object, we keep moving it
+                // let thisObjCollision = rayCast.intersectObjects([object, this]);
+                // console.log(thisObjCollision)
+                // while (thisObjCollision.length > 1 && thisObjCollision[0].length < dirVec.length()) {
+                //     // While more than one object is intersecting
+                //     this.mesh.position.add(this.state.vel.clone().multiplyScalar(2))
+                // }
+
                 this.mesh.position.add(this.state.vel.clone().multiplyScalar(2))
 
                 if (object.name === "brick") {

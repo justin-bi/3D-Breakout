@@ -26,6 +26,7 @@ class Platform extends Group {
         this.mesh.userData.platform = this;
 
         var platform = this.mesh;
+        platform.xDist = xDistance;
         parent.add(this.mesh);
 
         let handlePlatformEvents = function(event) {
@@ -37,11 +38,17 @@ class Platform extends Group {
 
             if (event.key == "ArrowLeft"){  
                 platform.translateX(-this.speed);
-                let xPos = platform.position.x
-                // if (xPos + width / 2 >= )
+                // This code makes sure no part of the platform exits the borders
+                if (platform.position.x < -platform.xDist + width / 2) {
+                    platform.position.x = -platform.xDist + width / 2
+                }
             }
             else if (event.key == "ArrowRight"){
                 platform.translateX(this.speed);
+                // This code makes sure no part of the platform exits the borders
+                if (platform.position.x > platform.xDist - width / 2) {
+                    platform.position.x = platform.xDist - width / 2
+                }
             } 
             else return;
         }
