@@ -29,12 +29,21 @@ table {
     width: 100%;
 }
 
+p {
+  font-family: 'Open Sans' !important;
+  font-style: italic;
+  color: white;
+  width: 100%;
+  text-align: center;
+}
+
 th, td {
   padding:2vh;
 }
 
 
-#instructions-container h1 {
+#instructions-container h1,
+#game-end-container h1 {
   font-family: 'Press Start 2P' !important;
   font-size: 1.5vw;
   color: white;
@@ -44,7 +53,8 @@ th, td {
   text-align: center;
 }
 
-#instructions-container {
+#instructions-container,
+#game-end-container {
     justify-content: center;
     align-items: center;
     background-color: rgba(0, 0, 0, 0.75);

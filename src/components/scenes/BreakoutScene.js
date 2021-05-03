@@ -4,7 +4,7 @@ import { Scene, Color } from 'three';
 import { Ball, Border, Brick, Heart } from 'objects';
 import { Platform } from 'objects';
 import { BasicLights } from 'lights';
-import * as THREE from 'three' 
+import * as THREE from 'three'
 
 /* COLOR SCHEME */
 
@@ -32,7 +32,7 @@ const NUMBER_OF_LIVES = 3;
  * to create gaps between bricks. Finally, the function returns the
  * number of bricks created.
  */
-let populateWithBlocks = function(scene, numRows, minBricksPerRow, maxWidthOfBrick, 
+let populateWithBlocks = function(scene, numRows, minBricksPerRow, maxWidthOfBrick,
     maxHeightOfBrick, interval) {
     let totalBricks = 0;
 
@@ -42,7 +42,7 @@ let populateWithBlocks = function(scene, numRows, minBricksPerRow, maxWidthOfBri
 
     const brickGeom = new THREE.BoxGeometry(actualWidth, actualHeight, 1);
 
-    // how we know which rows to alternate since either even 
+    // how we know which rows to alternate since either even
     // or odd will have an extra brick: extraOddBrick = 1 - extraEvenBrick
     let extraEvenBrick = 1;
 
@@ -225,7 +225,7 @@ class BreakoutScene extends Scene {
         this.inPlay = false;
         // has the ball started (we've hit the arrow up key)?
         this.ballStarted = false;
-        // game paused 
+        // game paused
         this.paused = false;
 
         // did the player win?
@@ -347,7 +347,7 @@ class BreakoutScene extends Scene {
         this.platform.mesh.position.add(changeInPlatformPosition);
     }
 
-    endGame() { 
+    endGame() {
         this.inPlay = false;
         this.gameOver = true;
 
@@ -356,6 +356,34 @@ class BreakoutScene extends Scene {
         }
 
         // TODO: go to end screen & use gameWon to display who won
+        // make game won message
+        if (this.gameWon) {
+          let gameWonContainer = document.createElement('div');
+          gameWonContainer.id = "game-end-container";
+          document.body.appendChild(gameWonContainer);
+
+          let gameWonTitle = document.createElement('h1');
+          gameWonTitle.innerText = "YAY!";
+          gameWonContainer.appendChild(gameWonTitle);
+
+          let gameWonText = document.createElement('p');
+          gameWonText.innerHTML = "You beat this level! <br> <br> Press [SPACEBAR] to continue the game.";
+          gameWonContainer.appendChild(gameWonText);
+        }
+        else {
+          let gameLostContainer = document.createElement('div');
+          gameLostContainer.id = "game-end-container";
+          document.body.appendChild(gameLostContainer);
+
+          let gameLostTitle = document.createElement('h1');
+          gameLostTitle.innerText = "OH NO!"
+          gameLostContainer.appendChild(gameLostTitle);
+
+          let gameLostText = document.createElement('p');
+          gameLostText.innerHTML = "You didn't beat this level. <br><br> Press [SPACEBAR] to restart the game."
+          gameLostContainer.appendChild(gameLostText);
+        }
+
     }
 }
 
