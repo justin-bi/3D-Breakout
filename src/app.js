@@ -87,7 +87,7 @@ instructionsContainer.appendChild(table);
 
 let up = table.insertRow();
 up.insertCell(0).innerHTML = "&#8593;";
-up.insertCell(1).innerHTML = "START/RESUME";
+up.insertCell(1).innerHTML = "START";
 
 let left = table.insertRow();
 left.insertCell(0).innerHTML = "&#8592;";
@@ -99,7 +99,7 @@ right.insertCell(1).innerHTML = "Move the platform right";
 
 let pause = table.insertRow();
 pause.insertCell(0).innerHTML = "P";
-pause.insertCell(1).innerHTML = "Pause the game";
+pause.insertCell(1).innerHTML = "PAUSE/RESUME";
 
 let mouse = table.insertRow();
 mouse.insertCell(0).innerHTML = "Mouse";
@@ -107,6 +107,8 @@ mouse.insertCell(1).innerHTML = "Move the camera";
 
 // the instruction window disappears when the game is in play
 // and reappears when the game is paused
+var isPaused = false;
+var gameStarted = false;
 let handlePlayerEvent = function(event) {
   // Ignore keypresses typed into a text box
   if (event.target.tagName === "INPUT") {
@@ -115,9 +117,16 @@ let handlePlayerEvent = function(event) {
 
   if (event.key == "ArrowUp") {
     instructionsContainer.style.visibility = 'hidden';
+    gameStarted = true;
   }
   else if (event.key == "p") {
-    instructionsContainer.style.visibility = 'visible';
+    if (isPaused && gameStarted) {
+      instructionsContainer.style.visibility = 'hidden';
+    }
+    else {
+      instructionsContainer.style.visibility = 'visible';
+    }
+    isPaused = !isPaused;
   }
 }
 window.addEventListener("keydown", handlePlayerEvent);
