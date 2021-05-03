@@ -4,7 +4,10 @@ import { Scene, Color } from 'three';
 import { Ball, Border, Brick, Heart } from 'objects';
 import { Platform } from 'objects';
 import { BasicLights } from 'lights';
-import * as THREE from 'three'
+import * as THREE from 'three';
+
+import Happy from '../../assets/images/yay.gif';
+import Sad from '../../assets/images/noo.gif';
 
 /* COLOR SCHEME */
 
@@ -366,9 +369,18 @@ class BreakoutScene extends Scene {
           gameWonTitle.innerText = "YAY!";
           gameWonContainer.appendChild(gameWonTitle);
 
-          let gameWonText = document.createElement('p');
-          gameWonText.innerHTML = "You beat this level! <br> <br> Press [SPACEBAR] to continue the game.";
-          gameWonContainer.appendChild(gameWonText);
+          let gameWonText1 = document.createElement('p');
+          gameWonText1.innerHTML = "You beat this level!";
+          gameWonContainer.appendChild(gameWonText1);
+
+          let gameWonImg = document.createElement('img');
+          gameWonImg.src = Happy;
+          gameWonImg.alt=":)"
+          gameWonContainer.appendChild(gameWonImg);
+
+          let gameWonText2 = document.createElement('p');
+          gameWonText2.innerHTML = "Press [SPACEBAR] to continue the game.";
+          gameWonContainer.appendChild(gameWonText2);
         }
         else {
           let gameLostContainer = document.createElement('div');
@@ -379,9 +391,19 @@ class BreakoutScene extends Scene {
           gameLostTitle.innerText = "OH NO!"
           gameLostContainer.appendChild(gameLostTitle);
 
-          let gameLostText = document.createElement('p');
-          gameLostText.innerHTML = "You didn't beat this level. <br><br> Press [SPACEBAR] to restart the game."
-          gameLostContainer.appendChild(gameLostText);
+          let gameLostText1 = document.createElement('p');
+          gameLostText1.innerHTML = "You didn't beat this level.";
+          gameLostContainer.appendChild(gameLostText1);
+
+          let gameLostImg = document.createElement('img');
+          gameLostImg.src = Sad;
+          gameLostImg.alt=":(";
+          gameLostContainer.appendChild(gameLostImg);
+
+          let gameLostText2 = document.createElement('p');
+          gameLostText2.innerHTML = " <br><br> Press [SPACEBAR] to restart the game.";
+          gameLostContainer.appendChild(gameLostText2);
+
         }
 
     }

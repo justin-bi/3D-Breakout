@@ -58,10 +58,18 @@ th, td {
     justify-content: center;
     align-items: center;
     background-color: rgba(0, 0, 0, 0.75);
-    height: 45vh;
+    height: 50vh;
     width: 20vw;
     position: absolute;
     top: 30vh;
     left: 40vw;
     padding: 2vw;
+}
+
+img {
+  max-height: 25vh;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0;
 }
