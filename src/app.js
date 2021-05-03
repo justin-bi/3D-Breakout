@@ -86,24 +86,24 @@ let table = document.createElement('table');
 instructionsContainer.appendChild(table);
 
 let up = table.insertRow();
-up.insertCell(0).innerHTML = "&#8593;";
+up.insertCell(0).innerHTML = "[&#8593;]";
 up.insertCell(1).innerHTML = "START";
 
 let left = table.insertRow();
-left.insertCell(0).innerHTML = "&#8592;";
+left.insertCell(0).innerHTML = "[&#8592;]";
 left.insertCell(1).innerHTML = "Move the platform left";
 
 let right = table.insertRow();
-right.insertCell(0).innerHTML = "&#8594;";
+right.insertCell(0).innerHTML = "[&#8594;]";
 right.insertCell(1).innerHTML = "Move the platform right";
 
 let pause = table.insertRow();
-pause.insertCell(0).innerHTML = "P";
+pause.insertCell(0).innerHTML = "[P]";
 pause.insertCell(1).innerHTML = "PAUSE/RESUME";
 
 let mouse = table.insertRow();
-mouse.insertCell(0).innerHTML = "Mouse";
-mouse.insertCell(1).innerHTML = "Move the camera";
+mouse.insertCell(0).innerHTML = "[MOUSE]";
+mouse.insertCell(1).innerHTML = "Change perspective";
 
 // the instruction window disappears when the game is in play
 // and reappears when the game is paused
