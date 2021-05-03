@@ -2,7 +2,6 @@ import { Group } from 'three';
 // Potentially useful stuff, just wanted to save a copy from the stuff we deleted
 import { TWEEN } from 'three/examples/jsm/libs/tween.module.min.js';
 import * as THREE from 'three' // Probably need to change later, doing this for now for simplicity
-import { Brick } from 'objects';
 
 let ballI = 0;
 
@@ -18,12 +17,10 @@ class Ball extends Group {
         };
 
         const geometry = new THREE.SphereGeometry(radius, 8, 8);
-        console.log('geom: ', geometry)
-
 
         // Build the vertices because three js is wack lmao
-        // Want to store the vertices as Vector3's 
-        let vertices = []
+        // Want to store the vertices as Vector3s
+        let vertices = [];
         // this.mesh.geometry.attributes.position;
         for (let vi = 0; vi < geometry.attributes.position.count; vi++) {
             let vert = new THREE.Vector3(
@@ -33,7 +30,7 @@ class Ball extends Group {
             )
             vertices.push(vert) 
         }
-        this.verts = vertices
+        this.verts = vertices;
 
         const material = new THREE.MeshPhongMaterial(
             {
@@ -64,7 +61,6 @@ class Ball extends Group {
         parent.addToUpdateList(this);
 
         var ball = this;
-        console.log(this.mesh)
 
         let handleBallEvent = function (event) {
             // Ignore keypresses typed into a text box
@@ -72,8 +68,8 @@ class Ball extends Group {
                 return;
             }
 
-            // if the game is paused or over, you shouldn't be able to start again
-            if (parent.paused || parent.gameOver) return;
+            // if the game has not started, is paused or over, you shouldn't be able to start again
+            if (!parent.gameStarted || parent.paused || parent.gameOver) return;
 
             // start ball moving
             if (event.key == "ArrowUp") {

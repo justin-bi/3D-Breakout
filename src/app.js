@@ -85,9 +85,13 @@ instructionsContainer.appendChild(instructionsText);
 let table = document.createElement('table');
 instructionsContainer.appendChild(table);
 
+let space = table.insertRow();
+space.insertCell(0).innerHTML = "[SPACEBAR]";
+space.insertCell(1).innerHTML = "START game";
+
 let up = table.insertRow();
 up.insertCell(0).innerHTML = "[&#8593;]";
-up.insertCell(1).innerHTML = "START/Move the ball";
+up.insertCell(1).innerHTML = "Start the ball";
 
 let left = table.insertRow();
 left.insertCell(0).innerHTML = "[&#8592;]";
@@ -108,31 +112,34 @@ mouse.insertCell(1).innerHTML = "Change perspective";
 // the instruction window disappears when the game is in play
 // and reappears when the game is paused
 var isPaused = false;
-var gameStarted = false;
-let handlePlayerEvent = function(event) {
-  // Ignore keypresses typed into a text box
-  if (event.target.tagName === "INPUT") {
-      return;
-  }
 
-  if (event.key == "ArrowUp") {
-    instructionsContainer.style.visibility = 'hidden';
-    gameStarted = true;
-  }
-  else if (event.key == "p") {
-    if (isPaused && gameStarted) {
-      instructionsContainer.style.visibility = 'hidden';
+let handlePlayerEvent = function(event) {
+    // Ignore keypresses typed into a text box
+    if (event.target.tagName === "INPUT") {
+        return;
     }
-    else {
-      instructionsContainer.style.visibility = 'visible';
+
+    if (event.key == " ") {
+        // if game is over, go back to main screen
+        if (scene.gameOver) {
+            window.location.reload();
+        }
+        // if game hasn't started yet, make this screen go away
+        else {
+            instructionsContainer.style.visibility = 'hidden';
+            scene.gameStarted = true;
+        }
     }
-    isPaused = !isPaused;
-  }
-  else if (event.key == " ") {
-    if (scene.gameOver) {
-      window.location.reload();
+    else if (event.key == "p") {
+        if (isPaused && scene.gameStarted) {
+            instructionsContainer.style.visibility = 'hidden';
+        }
+        else {
+            instructionsContainer.style.visibility = 'visible';
+        }
+
+        isPaused = !isPaused;
     }
-  }
-  else return;
+    else return;
 }
 window.addEventListener("keydown", handlePlayerEvent);

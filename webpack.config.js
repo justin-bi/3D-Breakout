@@ -3,56 +3,57 @@ const pkg = require('./package.json');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const buildPath = './build/';
 
-module.exports = {
-  entry: ['./src/app.js'],
-  output: {
-    path: path.join(__dirname, buildPath),
-    filename: '[name].[hash].js',
-    publicPath: `/${pkg.repository}/`,
-  },
-  target: 'web',
-  devtool: 'source-map',
-  module: {
-    rules: [{
-        test: /\.css$/i,
-        use: ['style-loader', 'css-loader'],
-      },
-      {
-        test: /\.js$/,
-        use: 'babel-loader',
-        exclude: path.resolve(__dirname, './node_modules/'),
-      },
-      {
-        test: /\.(jpe?g|png|gif|svg|tga|gltf|babylon|mtl|pcb|pcd|prwm|obj|mat|mp3|ogg)$/i,
-        use: 'file-loader',
-        exclude: path.resolve(__dirname, './node_modules/'),
-      },
-      {
-        test: /\.(vert|frag|glsl|shader|txt)$/i,
-        use: 'raw-loader',
-        exclude: path.resolve(__dirname, './node_modules/'),
-      },
-      {
-        type: 'javascript/auto',
-        test: /\.(json)/,
-        exclude: path.resolve(__dirname, './node_modules/'),
-        use: [{
-          loader: 'file-loader',
-        }, ],
-      },
-    ],
-  },
-  resolve: { // SEE HERE if you want to add more folders to the components directory
-    alias: {
-      lights$: path.resolve(__dirname, 'src/components/lights'),
-      objects$: path.resolve(__dirname, 'src/components/objects'),
-      scenes$: path.resolve(__dirname, 'src/components/scenes'),
+    module.exports = {
+    entry: ['./src/app.js'],
+    output: {
+        path: path.join(__dirname, buildPath),
+        filename: '[name].[hash].js',
+        publicPath: `/${pkg.repository}/`,
     },
-  },
-  plugins: [
-    new HtmlWebpackPlugin({
-      title: pkg.title,
-      favicon: 'src/favicon.ico'
-    }),
-  ],
-};
+    target: 'web',
+    devtool: 'source-map',
+    module: {
+        rules: [{
+            test: /\.css$/i,
+            use: ['style-loader', 'css-loader'],
+        },
+        {
+            test: /\.js$/,
+            use: 'babel-loader',
+            exclude: path.resolve(__dirname, './node_modules/'),
+        },
+        {
+            test: /\.(jpe?g|png|gif|svg|tga|gltf|babylon|mtl|pcb|pcd|prwm|obj|mat|mp3|ogg)$/i,
+            use: 'file-loader',
+            exclude: path.resolve(__dirname, './node_modules/'),
+        },
+        {
+            test: /\.(vert|frag|glsl|shader|txt)$/i,
+            use: 'raw-loader',
+            exclude: path.resolve(__dirname, './node_modules/'),
+        },
+        {
+            type: 'javascript/auto',
+            test: /\.(json)/,
+            exclude: path.resolve(__dirname, './node_modules/'),
+            use: [{
+            loader: 'file-loader',
+            }, ],
+        },
+        ],
+    },
+    resolve: { // SEE HERE if you want to add more folders to the components directory
+        alias: {
+        levels$: path.resolve(__dirname, 'src/components/levels'),
+        lights$: path.resolve(__dirname, 'src/components/lights'),
+        objects$: path.resolve(__dirname, 'src/components/objects'),
+        scenes$: path.resolve(__dirname, 'src/components/scenes'),
+        },
+    },
+    plugins: [
+        new HtmlWebpackPlugin({
+        title: pkg.title,
+        favicon: 'src/favicon.ico'
+        }),
+    ],
+    };

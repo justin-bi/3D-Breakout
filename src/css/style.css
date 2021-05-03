@@ -12,13 +12,13 @@
     display: flex;
 }
 
-#title-container h1{
+#title-container h1 {
     font-family: 'Press Start 2P' !important;
     font-size: 50px;
     color: white;
     padding: 0px;
     margin: 0px;
-    text-shadow: 5px 5px darkgreen;
+    text-shadow: 5px 5px #17183b; /* space cadet */
     text-align: center;
 }
 
@@ -30,27 +30,27 @@ table {
 }
 
 p {
-  font-family: 'Open Sans' !important;
-  font-style: italic;
-  color: white;
-  width: 100%;
-  text-align: center;
+    font-family: 'Open Sans' !important;
+    font-style: italic;
+    color: white;
+    width: 100%;
+    text-align: center;
 }
 
-th, td {
-  padding:2vh;
+th,
+td {
+    padding: 2vh;
 }
-
 
 #instructions-container h1,
 #game-end-container h1 {
-  font-family: 'Press Start 2P' !important;
-  font-size: 1.5vw;
-  color: white;
-  padding: 0px;
-  margin: 0px;
-  text-shadow: 5px 5px blue;
-  text-align: center;
+    font-family: 'Press Start 2P' !important;
+    font-size: 1.5vw;
+    color: white;
+    padding: 0px;
+    margin: 0px;
+    text-shadow: 5px 5px #6369d1;
+    text-align: center;
 }
 
 #instructions-container,
@@ -58,7 +58,6 @@ th, td {
     justify-content: center;
     align-items: center;
     background-color: rgba(0, 0, 0, 0.75);
-    height: 50vh;
     width: 20vw;
     position: absolute;
     top: 25vh;
@@ -66,10 +65,18 @@ th, td {
     padding: 2vw;
 }
 
+#instructions-container {
+    height: 52vh;
+}
+
+#game-end-container {
+    height: 50vh;
+}
+
 img {
-  max-height: 25vh;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 0;
+    max-height: 25vh;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0;
 }
