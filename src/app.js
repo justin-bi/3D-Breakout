@@ -87,7 +87,7 @@ instructionsContainer.appendChild(table);
 
 let up = table.insertRow();
 up.insertCell(0).innerHTML = "[&#8593;]";
-up.insertCell(1).innerHTML = "START";
+up.insertCell(1).innerHTML = "START/Move the ball";
 
 let left = table.insertRow();
 left.insertCell(0).innerHTML = "[&#8592;]";
