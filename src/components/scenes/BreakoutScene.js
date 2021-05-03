@@ -23,6 +23,57 @@ const BLACK_SHADE = 0x222222;
 // the number of lives the player gets to start
 const NUMBER_OF_LIVES = 3;
 
+
+// set up game won message
+var gameWonContainer = document.createElement('div');
+gameWonContainer.id = "game-end-container";
+document.body.appendChild(gameWonContainer);
+
+let gameWonTitle = document.createElement('h1');
+gameWonTitle.innerText = "YAY!";
+gameWonContainer.appendChild(gameWonTitle);
+
+let gameWonText1 = document.createElement('p');
+gameWonText1.innerHTML = "You beat this level!";
+gameWonContainer.appendChild(gameWonText1);
+
+let gameWonImg = document.createElement('img');
+gameWonImg.src = Happy;
+gameWonImg.alt=":)"
+gameWonContainer.appendChild(gameWonImg);
+
+let gameWonText2 = document.createElement('p');
+gameWonText2.innerHTML = "Press [SPACEBAR] to continue the game.";
+gameWonContainer.appendChild(gameWonText2);
+
+gameWonContainer.style.visibility = "hidden";
+
+// set up game lost message
+let gameLostContainer = document.createElement('div');
+gameLostContainer.id = "game-end-container";
+document.body.appendChild(gameLostContainer);
+
+let gameLostTitle = document.createElement('h1');
+gameLostTitle.innerText = "OH NO!"
+gameLostContainer.appendChild(gameLostTitle);
+
+let gameLostText1 = document.createElement('p');
+gameLostText1.innerHTML = "You didn't beat this level.";
+gameLostContainer.appendChild(gameLostText1);
+
+let gameLostImg = document.createElement('img');
+gameLostImg.src = Sad;
+gameLostImg.alt=":(";
+gameLostContainer.appendChild(gameLostImg);
+
+let gameLostText2 = document.createElement('p');
+gameLostText2.innerHTML = " <br><br> Press [SPACEBAR] to restart the game.";
+gameLostContainer.appendChild(gameLostText2);
+
+gameLostContainer.style.visibility = "hidden";
+
+
+
 /**
  * Populate the passed-in scene with rows of bricks (number of rows is
  * numBricks); rows have alternating numbers of bricks with rows
@@ -361,51 +412,11 @@ class BreakoutScene extends Scene {
         // TODO: go to end screen & use gameWon to display who won
         // make game won message
         if (this.gameWon) {
-          let gameWonContainer = document.createElement('div');
-          gameWonContainer.id = "game-end-container";
-          document.body.appendChild(gameWonContainer);
-
-          let gameWonTitle = document.createElement('h1');
-          gameWonTitle.innerText = "YAY!";
-          gameWonContainer.appendChild(gameWonTitle);
-
-          let gameWonText1 = document.createElement('p');
-          gameWonText1.innerHTML = "You beat this level!";
-          gameWonContainer.appendChild(gameWonText1);
-
-          let gameWonImg = document.createElement('img');
-          gameWonImg.src = Happy;
-          gameWonImg.alt=":)"
-          gameWonContainer.appendChild(gameWonImg);
-
-          let gameWonText2 = document.createElement('p');
-          gameWonText2.innerHTML = "Press [SPACEBAR] to continue the game.";
-          gameWonContainer.appendChild(gameWonText2);
+          gameWonContainer.style.visibility = "visible";
         }
         else {
-          let gameLostContainer = document.createElement('div');
-          gameLostContainer.id = "game-end-container";
-          document.body.appendChild(gameLostContainer);
-
-          let gameLostTitle = document.createElement('h1');
-          gameLostTitle.innerText = "OH NO!"
-          gameLostContainer.appendChild(gameLostTitle);
-
-          let gameLostText1 = document.createElement('p');
-          gameLostText1.innerHTML = "You didn't beat this level.";
-          gameLostContainer.appendChild(gameLostText1);
-
-          let gameLostImg = document.createElement('img');
-          gameLostImg.src = Sad;
-          gameLostImg.alt=":(";
-          gameLostContainer.appendChild(gameLostImg);
-
-          let gameLostText2 = document.createElement('p');
-          gameLostText2.innerHTML = " <br><br> Press [SPACEBAR] to restart the game.";
-          gameLostContainer.appendChild(gameLostText2);
-
+          gameLostContainer.style.visibility = "visible";
         }
-
     }
 }
 

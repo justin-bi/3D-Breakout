@@ -12,7 +12,7 @@ import { BreakoutScene } from './components/scenes';
 import './css/style.css'
 
 // Initialize core ThreeJS components
-const scene = new BreakoutScene();
+var scene = new BreakoutScene();
 const camera = new PerspectiveCamera();
 const renderer = new WebGLRenderer({ antialias: true });
 
@@ -44,7 +44,7 @@ const onAnimationFrameHandler = (timeStamp) => {
     scene.update && scene.update(timeStamp);
     window.requestAnimationFrame(onAnimationFrameHandler);
 };
-window.requestAnimationFrame(onAnimationFrameHandler);
+let id = window.requestAnimationFrame(onAnimationFrameHandler);
 
 // Resize Handler
 const windowResizeHandler = () => {
@@ -128,5 +128,11 @@ let handlePlayerEvent = function(event) {
     }
     isPaused = !isPaused;
   }
+  else if (event.key == " ") {
+    if (scene.gameOver) {
+      window.location.reload();
+    }
+  }
+  else return;
 }
 window.addEventListener("keydown", handlePlayerEvent);
