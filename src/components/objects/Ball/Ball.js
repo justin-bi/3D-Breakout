@@ -18,6 +18,23 @@ class Ball extends Group {
         };
 
         const geometry = new THREE.SphereGeometry(radius, 8, 8);
+        console.log('geom: ', geometry)
+
+
+        // Build the vertices because three js is wack lmao
+        // Want to store the vertices as Vector3's 
+        let vertices = []
+        // this.mesh.geometry.attributes.position;
+        for (let vi = 0; vi < geometry.attributes.position.count; vi++) {
+            let vert = new THREE.Vector3(
+                geometry.attributes.position.array[vi * 3], 
+                geometry.attributes.position.array[vi * 3 + 1], 
+                geometry.attributes.position.array[vi * 3 + 2]
+            )
+            vertices.push(vert) 
+        }
+        this.verts = vertices
+
         const material = new THREE.MeshPhongMaterial(
             {
                 color: color,
@@ -47,8 +64,9 @@ class Ball extends Group {
         parent.addToUpdateList(this);
 
         var ball = this;
+        console.log(this.mesh)
 
-        let handleBallEvent = function(event) {
+        let handleBallEvent = function (event) {
             // Ignore keypresses typed into a text box
             if (event.target.tagName === "INPUT") {
                 return;
@@ -58,7 +76,7 @@ class Ball extends Group {
             if (parent.paused || parent.gameOver) return;
 
             // start ball moving
-            if (event.key == "ArrowUp"){
+            if (event.key == "ArrowUp") {
                 parent.ballStarted = true;
 
                 ball.moving = true;
@@ -69,28 +87,6 @@ class Ball extends Group {
 
         window.addEventListener("keydown", handleBallEvent);
     }
-
-    // Not needed, but just wanted to keep this code somewhere such that we don't need to completley  
-    // spin() {
-    //     // Add a simple twirl
-    //     this.state.twirl += 6 * Math.PI;
-
-    //     // Use timing library for more precice "bounce" animation
-    //     // TweenJS guide: http://learningthreejs.com/blog/2011/08/17/tweenjs-for-smooth-animation/
-    //     // Possible easings: http://sole.github.io/tween.js/examples/03_graphs.html
-    //     const jumpUp = new TWEEN.Tween(this.position)
-    //         .to({ y: this.position.y + 1 }, 300)
-    //         .easing(TWEEN.Easing.Quadratic.Out);
-    //     const fallDown = new TWEEN.Tween(this.position)
-    //         .to({ y: 0 }, 300)
-    //         .easing(TWEEN.Easing.Quadratic.In);
-
-    //     // Fall down after jumping up
-    //     jumpUp.onComplete(() => fallDown.start());
-
-    //     // Start animation
-    //     jumpUp.start();
-    // }
 
     update(timeStamp) {
 
@@ -103,10 +99,18 @@ class Ball extends Group {
         // Code from here: https://stackoverflow.com/questions/11473755/how-to-detect-collision-in-three-js
         // Open to ideas, since this seems a tad complex
         let pos = this.mesh.position.clone();
-        let EPSILON = 0.05;
 
-        for (let vi = 0; vi < this.mesh.geometry.vertices.length; vi++) {
-            let localVert = this.mesh.geometry.vertices[vi];
+
+        // for (let vi = 0; vi < this.mesh.geometry.vertices.length; vi++) {
+        //     let localVert = this.mesh.geometry.vertices[vi];
+
+
+        // let vertices = this.mesh.geometry.attributes.position;
+        // for (let vi = 0; vi < vertices.count / 3; vi++) {
+        //     let localVert = new THREE.Vector3(vertices[vi * 3], vertices[vi * 3 + 1], vertices[vi * 3 + 2]);
+
+        for (let vi = 0; vi < this.verts.length; vi++) {
+            let localVert = this.verts[vi];
             // I think this doesn't actually transform anything, since this mesh was declared at the
             // origin, but it's just here for thoroughness
             let globalVert = localVert.clone().applyMatrix4(this.mesh.matrix);
@@ -138,11 +142,11 @@ class Ball extends Group {
                 // First, handle cases where the ball collides mostly on the left or right
                 if (angle < 30 || (angle >= 150 && angle < 210) || angle >= 330) {
                     this.state.vel.x *= -1;
-                } 
+                }
                 // Otherwise, handle cases where it mostly bounces top or bottom
-                else if ((angle >= 60 && angle < 120) || (angle >= 240 && angle < 300)) { 
-                   this.state.vel.y *= -1;
-                } 
+                else if ((angle >= 60 && angle < 120) || (angle >= 240 && angle < 300)) {
+                    this.state.vel.y *= -1;
+                }
                 // Else, we assume it mostly bounced off a corner and reflect both
                 else {
                     this.state.vel.y *= -1;
@@ -160,7 +164,7 @@ class Ball extends Group {
                     this.mesh.position.y = object.position.y + object.geometry.parameters.height + this.mesh.geometry.parameters.radius
                     // console.log(object.position)
                     // console.log('height', object.geometry.parameters.height)
-                    
+
                 }
 
                 // Do this hack for now
@@ -169,7 +173,7 @@ class Ball extends Group {
                 if (object.name === "brick") {
                     this.mesh.parent.removeBrick(object.userData.brick);
                 } else if (object.name === "bottomBorder") {
-                    this.mesh.parent.handleBallHittingBottom(this); 
+                    this.mesh.parent.handleBallHittingBottom(this);
                 }
 
                 break;
