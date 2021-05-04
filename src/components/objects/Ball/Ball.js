@@ -42,7 +42,6 @@ class Ball extends Group {
         // keeps track of whether ball is moving
         this.moving = false;
 
-
         this.mesh = new THREE.Mesh(geometry, material);
         // Get a better starting position
         this.mesh.position.add(new THREE.Vector3(0, 0.1, 0))
@@ -96,22 +95,12 @@ class Ball extends Group {
         // Open to ideas, since this seems a tad complex
         let pos = this.mesh.position.clone();
 
-
-        // for (let vi = 0; vi < this.mesh.geometry.vertices.length; vi++) {
-        //     let localVert = this.mesh.geometry.vertices[vi];
-
-
-        // let vertices = this.mesh.geometry.attributes.position;
-        // for (let vi = 0; vi < vertices.count / 3; vi++) {
-        //     let localVert = new THREE.Vector3(vertices[vi * 3], vertices[vi * 3 + 1], vertices[vi * 3 + 2]);
-
         for (let vi = 0; vi < this.verts.length; vi++) {
-            let localVert = this.verts[vi];
             // I think this doesn't actually transform anything, since this mesh was declared at the
             // origin, but it's just here for thoroughness
-            let globalVert = localVert.clone().applyMatrix4(this.mesh.matrix);
-            let dirVec = globalVert.sub(this.mesh.position);
-            let rayCast = new THREE.Raycaster();
+            let globalVert = this.verts[vi].clone().applyMatrix4(this.mesh.matrix);
+            const dirVec = globalVert.sub(this.mesh.position);
+            const rayCast = new THREE.Raycaster();
             rayCast.set(pos, dirVec.clone().normalize());
             let collisionResults = rayCast.intersectObjects(this.parent.children);
 
@@ -133,7 +122,7 @@ class Ball extends Group {
                 // Everything that the ball bounces off of is a box mesh (hopefully it stays that way haha),
                 // so to calculate which way its angle should go, find the angle of the dirVec that caused the 
                 // collision. Then, if it's within a certain range, cause it to reflect a certain way. 
-                let angle = dirVec.clone().angleTo(new THREE.Vector3(1, 0, 0)) / Math.PI * 180 // Converting to degrees is easier
+                const angle = dirVec.clone().angleTo(new THREE.Vector3(1, 0, 0)) / Math.PI * 180 // Converting to degrees is easier
 
                 // First, handle cases where the ball collides mostly on the left or right
                 if (angle < 30 || (angle >= 150 && angle < 210) || angle >= 330) {
@@ -153,14 +142,10 @@ class Ball extends Group {
                     // Note that it should do something special for the paddle, eg if it hits a certain area of 
                     // the paddle it should change angle towards that direction, if the paddle is moving towards it
                     // the ball should move in the same direction, etc. 
-                    // this.mesh.position.sub(object.position.)
-                    // let platTop = object.position.clone()
-                    //     .add(new THREE.Vector3(0, , 0))
-                    // console.log('platTop', platTop)
-                    this.mesh.position.y = object.position.y + object.geometry.parameters.height + this.mesh.geometry.parameters.radius
-                    // console.log(object.position)
-                    // console.log('height', object.geometry.parameters.height)
 
+                    // This code makes sure that if the ball is colliding with the paddle, it ensures that the ball ends up 
+                    // outside the paddle
+                    this.mesh.position.y = object.position.y + object.geometry.parameters.height + this.mesh.geometry.parameters.radius
                 }
 
                 // Do this hack for now
