@@ -146,6 +146,11 @@ class Ball extends Group {
                     // This code makes sure that if the ball is colliding with the paddle, it ensures that the ball ends up 
                     // outside the paddle
                     this.mesh.position.y = object.position.y + object.geometry.parameters.height + this.mesh.geometry.parameters.radius
+
+                    const ballX = this.mesh.position.x
+                    const platLeft = object.position.y - object.geometry.parameters.width
+                    const platRight = object.position.y + object.geometry.parameters.width
+                    console.log(ballX, platLeft, platRight)
                 }
 
                 // Do this hack for now
