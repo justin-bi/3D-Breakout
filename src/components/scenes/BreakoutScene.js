@@ -21,7 +21,7 @@ const BALL_COLOR = 0x222222;
 /* LEVEL VALUES */
 const NUM_LEVELS = 7;
 
-const LIVES_PER_LEVEL = [4, 4, 3, 3, 3, 2, 2];
+const NUM_LIVES_AT_START = 4;
 // shade should darken with every level:
 // taken from an example palette on coolors.io: https://coolors.co/03045e-023e8a-0077b6-0096c7-00b4d8-48cae4-90e0ef-ade8f4-caf0f8
 const LEVEL_COLORS = [0xCAF0F8, 0x90E0EF, 0x00B4D8, 0x0096C7, 0x0077B6, 0x023E8A, 0x03045E];
@@ -31,6 +31,9 @@ const MIN_BRICKS_PER_ROW_PER_LEVEL = [3, 4, 4, 5, 5, 6, 6];
 const START_SPEED_PER_LEVEL = [new THREE.Vector3(-0.05, 0.05, 0), new THREE.Vector3(-0.05, 0.05, 0),
     new THREE.Vector3(-0.06, 0.06, 0), new THREE.Vector3(-0.07, 0.07, 0), new THREE.Vector3(-0.08, 0.08, 0),
     new THREE.Vector3(-0.09, 0.09, 0), new THREE.Vector3(-0.1, 0.1, 0)];
+
+// temporary start speed till we improve collisions
+const START_SPEED = new THREE.Vector3(-0.05, 0.05, 0);
 
 let createDecisionContainer = function(id, h1Text, pText1, image, imgAlt, pText2) {
     var container = document.createElement('div');
@@ -96,8 +99,8 @@ class BreakoutScene extends Scene {
 
         this.currentLevelNum = 0;
         this.currentLevel = new Level(this, LEVEL_COLORS[0], BRICK_COLORS, BALL_COLOR, BORDER_COLOR,
-            PLATFORM_COLOR, ROWS_PER_LEVEL[0], MIN_BRICKS_PER_ROW_PER_LEVEL[0], LIVES_PER_LEVEL[0],
-            START_SPEED_PER_LEVEL[0]);
+            PLATFORM_COLOR, ROWS_PER_LEVEL[0], MIN_BRICKS_PER_ROW_PER_LEVEL[0], NUM_LIVES_AT_START,
+            START_SPEED);
 
         var scene = this;
 
@@ -231,10 +234,8 @@ class BreakoutScene extends Scene {
         }
 
         if (this.levelWon) {
-            console.log("level won");
             // if you win the game
             if (this.currentLevelNum + 1 >= NUM_LEVELS) {
-                console.log("win game");
                 this.gameWonContainer.style.visibility = "visible";
                 this.gameOver = true;
             }
@@ -267,8 +268,8 @@ class BreakoutScene extends Scene {
         }
 
         this.currentLevel = new Level(this, LEVEL_COLORS[level], BRICK_COLORS, BALL_COLOR, BORDER_COLOR, 
-            PLATFORM_COLOR, ROWS_PER_LEVEL[level], MIN_BRICKS_PER_ROW_PER_LEVEL[level], LIVES_PER_LEVEL[level],
-            START_SPEED_PER_LEVEL[level]);
+            PLATFORM_COLOR, ROWS_PER_LEVEL[level], MIN_BRICKS_PER_ROW_PER_LEVEL[level], this.livesLeft,
+            START_SPEED);
     }
 }
 
