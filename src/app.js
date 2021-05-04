@@ -120,18 +120,26 @@ let handlePlayerEvent = function(event) {
     }
 
     if (event.key == " ") {
-        // if game is over, go back to main screen
+        // if game is over, reload main screen
         if (scene.gameOver) {
             window.location.reload();
         }
-        // if game hasn't started yet, make this screen go away
-        else {
+        else if (scene.levelOver) {
+            scene.nextLevel();
+        }
+        // if scene hasn't started yet, make the sceen go away
+        else if (!scene.gameStarted) {
             instructionsContainer.style.visibility = 'hidden';
+            scene.levelStartContainer.style.visibility = 'visible';
             scene.gameStarted = true;
+        }
+        else if (!scene.levelStarted) {
+            scene.levelStartContainer.style.visibility = 'hidden';
+            scene.levelStarted = true;
         }
     }
     else if (event.key == "p") {
-        if (isPaused && scene.gameStarted) {
+        if (isPaused && scene.levelStarted) {
             instructionsContainer.style.visibility = 'hidden';
         }
         else {

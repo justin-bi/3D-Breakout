@@ -43,7 +43,8 @@ td {
 }
 
 #instructions-container h1,
-#game-end-container h1 {
+.decision-container h1,
+#level-start-container h1 {
     font-family: 'Press Start 2P' !important;
     font-size: 1.5vw;
     color: white;
@@ -54,7 +55,8 @@ td {
 }
 
 #instructions-container,
-#game-end-container {
+.decision-container,
+#level-start-container {
     justify-content: center;
     align-items: center;
     background-color: rgba(0, 0, 0, 0.75);
@@ -69,8 +71,16 @@ td {
     height: 52vh;
 }
 
-#game-end-container {
-    height: 50vh;
+#win-container {
+    height: 42vh;
+}
+
+#lose-container {
+    height: 40vh;
+}
+
+#level-start-container {
+    height: 8vh;
 }
 
 img {

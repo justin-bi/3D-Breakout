@@ -9,8 +9,6 @@ import Sad from '../../assets/images/noo.gif';
 
 /* COLOR SCHEME */
 
-// color for the background
-const BACKGROUND_COLOR = 0x7ec0ee;
 // colors for the bricks
 const BRICK_COLORS = [0x00916e, 0xAEFFD8, 0xE44E5A, 0xFF990A, 0x6369D1];
 // color of the platform
@@ -21,62 +19,59 @@ const BORDER_COLOR = 0x222222;
 const BALL_COLOR = 0x222222;
 
 /* LEVEL VALUES */
+const NUM_LEVELS = 7;
+
 const LIVES_PER_LEVEL = [4, 4, 3, 3, 3, 2, 2];
-// these should be rainbow - taken from this palette: https://coolors.co/f94144-f3722c-f8961e-f9c74f-90be6d-43aa8b-577590
-const LEVEL_COLORS = [0xF94144, 0xF3722C, 0xF8961E, 0xF9C74F, 0x90BE6D, 0x43AA8B, 0x577590];
+// shade should darken with every level:
+// taken from an example palette on coolors.io: https://coolors.co/03045e-023e8a-0077b6-0096c7-00b4d8-48cae4-90e0ef-ade8f4-caf0f8
+const LEVEL_COLORS = [0xCAF0F8, 0x90E0EF, 0x00B4D8, 0x0096C7, 0x0077B6, 0x023E8A, 0x03045E];
+const LEVEL_COLORS_IN_HEX = ["#CAF0F8", "#90E0EF", "#00B4D8", "0096C7", "0077B6", "023E8A", "03045E"];
 const ROWS_PER_LEVEL = [2, 3, 4, 5, 6, 7, 7];
 const MIN_BRICKS_PER_ROW_PER_LEVEL = [3, 4, 4, 5, 5, 6, 6];
 // TODO: ADD INCREASED BALL SPEED
 // const BALL_SPEED_PER_LEVEL = [];
 
-// set up game won message
-var gameWonContainer = document.createElement('div');
-gameWonContainer.id = "game-end-container";
-document.body.appendChild(gameWonContainer);
+let createDecisionContainer = function(id, h1Text, pText1, image, imgAlt, pText2) {
+    var container = document.createElement('div');
+    container.id = id;
+    container.classList.add("decision-container");
+    document.body.appendChild(container);
 
-let gameWonTitle = document.createElement('h1');
-gameWonTitle.innerText = "YAY!";
-gameWonContainer.appendChild(gameWonTitle);
+    let title = document.createElement('h1');
+    title.innerText = h1Text;
+    container.appendChild(title);
 
-let gameWonText1 = document.createElement('p');
-gameWonText1.innerHTML = "You beat this level!";
-gameWonContainer.appendChild(gameWonText1);
+    let text1 = document.createElement('p');
+    text1.innerHTML = pText1;
+    container.appendChild(text1);
 
-let gameWonImg = document.createElement('img');
-gameWonImg.src = Happy;
-gameWonImg.alt=":)";
-gameWonContainer.appendChild(gameWonImg);
+    let img = document.createElement('img');
+    img.src = image;
+    img.alt = imgAlt;
+    container.appendChild(img);
 
-let gameWonText2 = document.createElement('p');
-gameWonText2.innerHTML = "Press [SPACEBAR] to continue the game.";
-gameWonContainer.appendChild(gameWonText2);
+    let text2 = document.createElement('p');
+    text2.innerHTML = pText2;
+    container.appendChild(text2);
 
-gameWonContainer.style.visibility = "hidden";
+    container.style.visibility = "hidden";
 
-// set up game lost message
-let gameLostContainer = document.createElement('div');
-gameLostContainer.id = "game-end-container";
-document.body.appendChild(gameLostContainer);
+    return container;
+}
 
-let gameLostTitle = document.createElement('h1');
-gameLostTitle.innerText = "OH NO!"
-gameLostContainer.appendChild(gameLostTitle);
+var levelStartContainer = document.createElement('div');
+levelStartContainer.id = "level-start-container";
+document.body.appendChild(levelStartContainer);
 
-let gameLostText1 = document.createElement('p');
-gameLostText1.innerHTML = "You didn't beat this level.";
-gameLostContainer.appendChild(gameLostText1);
+let levelStartTitle = document.createElement('h1');
+levelStartTitle.innerText = "Level";
+levelStartContainer.appendChild(levelStartTitle);
 
-let gameLostImg = document.createElement('img');
-gameLostImg.src = Sad;
-gameLostImg.alt=":(";
-gameLostContainer.appendChild(gameLostImg);
+let levelStartText = document.createElement('p');
+levelStartText.innerHTML = "Press [SPACEBAR] to start level.";
+levelStartContainer.appendChild(levelStartText);
 
-let gameLostText2 = document.createElement('p');
-gameLostText2.innerHTML = " <br><br> Press [SPACEBAR] to restart the game.";
-gameLostContainer.appendChild(gameLostText2);
-
-gameLostContainer.style.visibility = "hidden";
-
+levelStartContainer.style.visibility = "hidden";
 
 class BreakoutScene extends Scene {
     constructor() {
@@ -91,14 +86,16 @@ class BreakoutScene extends Scene {
         const lights = new BasicLights();
 
         this.add(lights);
+        this.lights = lights;
+
+        levelStartTitle.innerText = "Level 1";
+        levelStartTitle.style.textShadow = "5px 5px " + LEVEL_COLORS_IN_HEX[0];
+
+        this.levelStartContainer = levelStartContainer;
 
         this.currentLevelNum = 0;
-        this.currentLevel = new Level(this, LEVEL_COLORS[0], BRICK_COLORS, BALL_COLOR, BORDER_COLOR, 
+        this.currentLevel = new Level(this, LEVEL_COLORS[0], BRICK_COLORS, BALL_COLOR, BORDER_COLOR,
             PLATFORM_COLOR, ROWS_PER_LEVEL[0], MIN_BRICKS_PER_ROW_PER_LEVEL[0], LIVES_PER_LEVEL[0]);
-        /** 
-        this.currentLevel = new Level(this, BACKGROUND_COLOR, BRICK_COLORS, BALL_COLOR, BORDER_COLOR, 
-            PLATFORM_COLOR, 3, 4, 3);
-        */
 
         var scene = this;
 
@@ -109,7 +106,7 @@ class BreakoutScene extends Scene {
             }
 
             // should only pause during a game
-            if (!scene.ballStarted || scene.gameOver) return;
+            if (!scene.ballStarted || scene.levelOver) return;
 
             // start ball moving
             if (event.key == "p"){
@@ -118,8 +115,19 @@ class BreakoutScene extends Scene {
             else return;
         }
 
+        // has the game started?
+        this.gameStarted = false;
+        // is the whole game over?
+        this.gameOver = false;
+
         // listener can be found below
         window.addEventListener("keydown", handleKeydownEvent);
+        this.gameWonContainer = createDecisionContainer("win-container", "Congratulations!", "You beat the game!",
+            Happy, ":)", "Press [SPACEBAR] to play again!");
+        this.levelWonContainer = createDecisionContainer("win-container", "YAY!", "You beat this level!",
+            Happy, ":)", "Press [SPACEBAR] to go to the next level.");
+        this.gameLostContainer = createDecisionContainer("lose-container", "OH NO!", "You've lost the game!",
+            Sad, ":(", "Press [SPACEBAR] to play again.");
     }
 
     // Call this with an object to make sure it updates every timeStamp
@@ -145,8 +153,8 @@ class BreakoutScene extends Scene {
         brick.remove();
 
         if (this.bricksLeft <= 0) {
-            this.gameWon = true;
-            this.endGame();
+            this.levelWon = true;
+            this.endLevel();
         }
     }
 
@@ -180,13 +188,11 @@ class BreakoutScene extends Scene {
     handleBallHittingBottom(ball) {
         this.livesLeft--;
 
-        // hearts should be removed in reverse order than
-        // they were added
-        let current = this.currentLevel.numLives - this.livesLeft - 1;
-        this.hearts[current].remove();
+        // hearts should be removed in order added
+        this.hearts[this.livesLeft].remove();
 
         if (this.livesLeft <= 0) {
-            return this.endGame();
+            return this.endLevel();
         }
 
         this.handleReset(ball);
@@ -212,21 +218,50 @@ class BreakoutScene extends Scene {
         this.platform.mesh.position.add(changeInPlatformPosition);
     }
 
-    endGame() {
+    endLevel() {
         this.inPlay = false;
-        this.gameOver = true;
+        this.levelOver = true;
 
         for (let i = 0; i < this.balls.length; i++) {
             this.balls[i].moving = false;
         }
 
-        // make game won message
-        if (this.gameWon) {
-            gameWonContainer.style.visibility = "visible";
+        if (this.levelWon) {
+            // if you win the game
+            if (this.currentLevel + 1 >= NUM_LEVELS) {
+                this.gameWonContainer.style.visibility = "visible";
+                this.gameOver = true;
+            }
+            // if you just win the level
+            else
+                this.levelWonContainer.style.visibility = "visible";
         }
         else {
-            gameLostContainer.style.visibility = "visible";
+            this.gameLostContainer.style.visibility = "visible";
+            this.gameOver = true;
         }
+    }
+
+    nextLevel() {
+        let level =  ++this.currentLevelNum;
+
+        this.levelWonContainer.style.visibility = "hidden";
+        levelStartTitle.innerText = "Level " + (level + 1);
+        levelStartTitle.style.textShadow = "5px 5px " + LEVEL_COLORS_IN_HEX[level];
+
+        this.levelStartContainer.style.visibility = "visible";
+
+        // remove all of the current elements:
+        for (let i = this.children.length - 1; i >= 0; i--) {
+            if(this.children[i].type !== "Mesh") continue;
+
+            this.children[i].geometry.dispose();
+            this.children[i].material.dispose();
+            this.remove(this.children[i]);
+        }
+
+        this.currentLevel = new Level(this, LEVEL_COLORS[level], BRICK_COLORS, BALL_COLOR, BORDER_COLOR, 
+            PLATFORM_COLOR, ROWS_PER_LEVEL[level], MIN_BRICKS_PER_ROW_PER_LEVEL[level], LIVES_PER_LEVEL[level]);
     }
 }
 
