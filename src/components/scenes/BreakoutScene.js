@@ -218,6 +218,8 @@ class BreakoutScene extends Scene {
         let changeInPlatformPosition = new THREE.Vector3().addVectors(this.defaultPlatformPosition,
             this.platform.mesh.position.clone().multiplyScalar(-1));
         this.platform.mesh.position.add(changeInPlatformPosition);
+        this.platform.mesh.leftPressed = false;
+        this.platform.mesh.rightPressed = false;
     }
 
     endLevel() {

@@ -154,7 +154,7 @@ class Ball extends Group {
                     const platX = object.position.x
 
                     const offset = (ballX - platX) / halfWidth  // Will be [-1, 1]
-                    console.log(offset)
+                    // console.log(offset)
 
                     // const platLeft = object.position.x - object.geometry.parameters.width
                     // const platRight = object.position.x + object.geometry.parameters.width

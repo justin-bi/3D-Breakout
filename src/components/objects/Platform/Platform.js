@@ -21,11 +21,11 @@ class Platform extends Group {
         this.mesh = new THREE.Mesh(geometry, material);
         this.mesh.name = 'paddle';
         this.mesh.translateY(-yPosition);
-        this.width = width
+        this.mesh.width = width
 
         // Fields related to platform movement
-        this.leftPressed = false;
-        this.rightPressed = false;
+        this.mesh.leftPressed = false;
+        this.mesh.rightPressed = false;
         this.mesh.speed = 0.1
         // console.log(this)
 
