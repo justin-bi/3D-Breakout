@@ -68,8 +68,8 @@ class Ball extends Group {
                 return;
             }
 
-            // if the game has not started, is paused or over, you shouldn't be able to start again
-            if (!parent.gameStarted || parent.paused || parent.gameOver) return;
+            // if the level has not started, is paused or over, you shouldn't be able to start again
+            if (!parent.levelStarted || parent.paused || parent.levelOver) return;
 
             // start ball moving
             if (event.key == "ArrowUp") {

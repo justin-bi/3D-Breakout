@@ -85,7 +85,7 @@ class Level extends Group {
         let xSpace = 1;
 
         for (let i = 0; i < parent.livesLeft; i++) {
-            hearts.push(new Heart(parent, 0xE44E5A, (xDistance + OFFSET)/2 + i * xSpace,
+            hearts.push(new Heart(parent, 0xE44E5A, (xDistance + OFFSET) -  i * xSpace,
                 yDistanceAbove + 2 * OFFSET + PLATFORM_HEIGHT
                 + THICKNESS + OFFSET * 2, 0.03));
         }
@@ -96,16 +96,16 @@ class Level extends Group {
 
         // keep track of whether it's in play (it is when at least one ball is moving)
         parent.inPlay = false;
-        // has the game started?
-        parent.gameStarted = false;
+        // has the level started?
+        parent.levelStarted = false;
         // has the ball started (we've hit the arrow up key)?
         parent.ballStarted = false;
-        // game paused
+        // level paused
         parent.paused = false;
         // did the player win?
-        parent.gameWon = false;
-        // has the game ended?
-        parent.gameOver = false;
+        parent.levelWon = false;
+        // has the level ended?
+        parent.levelOver = false;
     }
 
     /**
