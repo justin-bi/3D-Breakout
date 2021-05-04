@@ -74,9 +74,11 @@ class Ball extends Group {
             // start ball moving
             if (event.key == "ArrowUp") {
                 parent.ballStarted = true;
-
-                ball.moving = true;
                 parent.inPlay = true;
+
+                for (let i = 0; i < parent.balls.length; i++) {
+                    parent.balls[i].moving = true;
+                }
             }
             else return;
         };

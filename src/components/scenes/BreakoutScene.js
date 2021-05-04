@@ -94,7 +94,7 @@ class BreakoutScene extends Scene {
         this.levelStartContainer = levelStartContainer;
 
         this.currentLevelNum = 0;
-        this.currentLevel = new Level(this, LEVEL_COLORS[0], BRICK_COLORS, BALL_COLOR, BORDER_COLOR, 
+        this.currentLevel = new Level(this, LEVEL_COLORS[0], BRICK_COLORS, BALL_COLOR, BORDER_COLOR,
             PLATFORM_COLOR, ROWS_PER_LEVEL[0], MIN_BRICKS_PER_ROW_PER_LEVEL[0], LIVES_PER_LEVEL[0]);
 
         var scene = this;
@@ -254,7 +254,6 @@ class BreakoutScene extends Scene {
         // remove all of the current elements:
         for (let i = this.children.length - 1; i >= 0; i--) {
             if(this.children[i].type !== "Mesh") continue;
-            let child = this.children[i];
 
             this.children[i].geometry.dispose();
             this.children[i].material.dispose();
