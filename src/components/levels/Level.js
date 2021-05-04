@@ -69,7 +69,7 @@ class Level extends Group {
         const RADIUS = 0.3;
 
         const translateVec = new THREE.Vector3(0, -SPACE_BELOW_ORIGIN + PLATFORM_HEIGHT/2 + RADIUS, 0);
-        const ball = new Ball(this.parent, RADIUS, ballColor, translateVec);
+        let ball = new Ball(this.parent, RADIUS, ballColor, translateVec);
 
         parent.balls = [];
         parent.balls.push(ball);
@@ -85,7 +85,7 @@ class Level extends Group {
         let xSpace = 1;
 
         for (let i = 0; i < parent.livesLeft; i++) {
-            hearts.push(new Heart(parent, 0xE44E5A, (xDistance + OFFSET)/2 + i * xSpace,
+            hearts.push(new Heart(parent, 0xE44E5A, (xDistance + OFFSET) -  i * xSpace,
                 yDistanceAbove + 2 * OFFSET + PLATFORM_HEIGHT
                 + THICKNESS + OFFSET * 2, 0.03));
         }
@@ -96,16 +96,16 @@ class Level extends Group {
 
         // keep track of whether it's in play (it is when at least one ball is moving)
         parent.inPlay = false;
-        // has the game started?
-        parent.gameStarted = false;
+        // has the level started?
+        parent.levelStarted = false;
         // has the ball started (we've hit the arrow up key)?
         parent.ballStarted = false;
-        // game paused
+        // level paused
         parent.paused = false;
         // did the player win?
-        parent.gameWon = false;
-        // has the game ended?
-        parent.gameOver = false;
+        parent.levelWon = false;
+        // has the level ended?
+        parent.levelOver = false;
     }
 
     /**
@@ -128,8 +128,6 @@ class Level extends Group {
         let actualWidth = maxWidthOfBrick * 0.95;
         let actualHeight = maxHeightOfBrick * 0.9;
 
-        const brickGeom = new THREE.BoxGeometry(actualWidth, actualHeight, 1);
-
         // how we know which rows to alternate since either even
         // or odd will have an extra brick: extraOddBrick = 1 - extraEvenBrick
         let extraEvenBrick = 1;
@@ -151,6 +149,7 @@ class Level extends Group {
             let colorStart = Math.floor(Math.random() * this.brickColors.length);
 
             for (let j = 0; j < numBricks; j++) {
+                const brickGeom = new THREE.BoxGeometry(actualWidth, actualHeight, 1);
                 let colorIndex = (colorStart + j) % this.brickColors.length;
 
 

@@ -67,15 +67,17 @@ class Ball extends Group {
                 return;
             }
 
-            // if the game has not started, is paused or over, you shouldn't be able to start again
-            if (!parent.gameStarted || parent.paused || parent.gameOver) return;
+            // if the level has not started, is paused or over, you shouldn't be able to start again
+            if (!parent.levelStarted || parent.paused || parent.levelOver) return;
 
             // start ball moving
             if (event.key == "ArrowUp") {
                 parent.ballStarted = true;
-
-                ball.moving = true;
                 parent.inPlay = true;
+
+                for (let i = 0; i < parent.balls.length; i++) {
+                    parent.balls[i].moving = true;
+                }
             }
             else return;
         };
@@ -152,9 +154,9 @@ class Ball extends Group {
                 this.mesh.position.add(this.state.vel);
 
                 if (object.name === "brick") {
-                    this.mesh.parent.removeBrick(object.userData.brick);
+                    this.parent.removeBrick(object.userData.brick);
                 } else if (object.name === "bottomBorder") {
-                    this.mesh.parent.handleBallHittingBottom(this);
+                    this.parent.handleBallHittingBottom(this);
                 }
 
                 break;
