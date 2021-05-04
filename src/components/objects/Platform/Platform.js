@@ -21,6 +21,13 @@ class Platform extends Group {
         this.mesh = new THREE.Mesh(geometry, material);
         this.mesh.name = 'paddle';
         this.mesh.translateY(-yPosition);
+        this.width = width
+
+        // Fields related to platform movement
+        this.leftPressed = false;
+        this.rightPressed = false;
+        this.mesh.speed = 0.1
+        // console.log(this)
 
         // add a reference to the platform object to its mesh
         this.mesh.userData.platform = this;
@@ -31,7 +38,6 @@ class Platform extends Group {
         parent.add(this.mesh);
 
         let handlePlatformEvents = function(event) {
-            this.speed = 0.5
             // Ignore keypresses typed into a text box
             if (event.target.tagName === "INPUT") {
                 return;
@@ -40,28 +46,54 @@ class Platform extends Group {
             // don't move platform unless at least one ball is moving
             if (!parent.inPlay || parent.gameOver) return;
 
-            if (event.key == "ArrowLeft"){  
-                platform.translateX(-this.speed);
-                // This code makes sure no part of the platform exits the borders
-                if (platform.position.x < -platform.xDist + width / 2) {
-                    platform.position.x = -platform.xDist + width / 2
-                }
+            if (event.key == "ArrowLeft"){
+                platform.leftPressed = true
             }
             else if (event.key == "ArrowRight"){
-                platform.translateX(this.speed);
-                // This code makes sure no part of the platform exits the borders
-                if (platform.position.x > platform.xDist - width / 2) {
-                    platform.position.x = platform.xDist - width / 2
-                }
+                platform.rightPressed = true;
             } 
             else return;
         }
+        parent.addToUpdateList(this);
 
+
+        let handleKeyUp = function(event) {
+            // Ignore keypresses typed into a text box
+            if (event.target.tagName === "INPUT") {
+                return;
+            }
+
+            // don't move platform unless at least one ball is moving
+            if (!parent.inPlay || parent.gameOver) return;
+
+            if (event.key == "ArrowLeft"){
+                platform.leftPressed = false
+            }
+            if (event.key == "ArrowRight"){
+                platform.rightPressed = false
+            }
+
+        }
         window.addEventListener("keydown", handlePlatformEvents);
+        window.addEventListener("keyup", handleKeyUp);
     }
 
     update(timeStamp) {
-
+        const mesh = this.mesh
+        if (mesh.leftPressed) {
+            mesh.translateX(-mesh.speed);
+            // This code makes sure no part of the platform exits the borders
+            if (mesh.position.x < -mesh.xDist + mesh.width / 2) {
+                mesh.position.x = -mesh.xDist + mesh.width / 2
+            }
+        }
+        if (mesh.rightPressed) {
+            mesh.translateX(mesh.speed);
+            // This code makes sure no part of the platform exits the borders
+            if (mesh.position.x > mesh.xDist - mesh.width / 2) {
+                mesh.position.x = mesh.xDist - mesh.width / 2
+            }
+        }
     }
 }
 

@@ -150,9 +150,16 @@ class Ball extends Group {
                     this.mesh.position.y = object.position.y + object.geometry.parameters.height + this.mesh.geometry.parameters.radius
 
                     const ballX = this.mesh.position.x
-                    const platLeft = object.position.y - object.geometry.parameters.width
-                    const platRight = object.position.y + object.geometry.parameters.width
-                    console.log(ballX, platLeft, platRight)
+                    const halfWidth = object.geometry.parameters.width / 2
+                    const platX = object.position.x
+
+                    const offset = (ballX - platX) / halfWidth  // Will be [-1, 1]
+                    console.log(offset)
+
+                    // const platLeft = object.position.x - object.geometry.parameters.width
+                    // const platRight = object.position.x + object.geometry.parameters.width
+                    // console.log(ballX, platLeft, platRight, object)
+                    // console.log(object.position)
                 }
 
                 // Do this hack for now
