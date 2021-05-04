@@ -6,14 +6,14 @@ import * as THREE from 'three' // Probably need to change later, doing this for 
 let ballI = 0;
 
 class Ball extends Group {
-    constructor(parent, radius, color, translateVec) {
+    constructor(parent, radius, color, translateVec, startVelocityVec) {
         // Call parent Group() constructor
         super();
 
         // Init state
         this.state = {
             // The direction of the ball, start by just going straight down
-            vel: new THREE.Vector3(-0.05, 0.05, 0),
+            vel: startVelocityVec,
         };
 
         const geometry = new THREE.SphereGeometry(radius, 8, 8);

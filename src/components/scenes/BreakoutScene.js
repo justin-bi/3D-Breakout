@@ -28,8 +28,9 @@ const LEVEL_COLORS = [0xCAF0F8, 0x90E0EF, 0x00B4D8, 0x0096C7, 0x0077B6, 0x023E8A
 const LEVEL_COLORS_IN_HEX = ["#CAF0F8", "#90E0EF", "#00B4D8", "0096C7", "0077B6", "023E8A", "03045E"];
 const ROWS_PER_LEVEL = [2, 3, 4, 5, 6, 7, 7];
 const MIN_BRICKS_PER_ROW_PER_LEVEL = [3, 4, 4, 5, 5, 6, 6];
-// TODO: ADD INCREASED BALL SPEED
-// const BALL_SPEED_PER_LEVEL = [];
+const START_SPEED_PER_LEVEL = [new THREE.Vector3(-0.05, 0.05, 0), new THREE.Vector3(-0.05, 0.05, 0),
+    new THREE.Vector3(-0.06, 0.06, 0), new THREE.Vector3(-0.07, 0.07, 0), new THREE.Vector3(-0.08, 0.08, 0),
+    new THREE.Vector3(-0.09, 0.09, 0), new THREE.Vector3(-0.1, 0.1, 0)];
 
 let createDecisionContainer = function(id, h1Text, pText1, image, imgAlt, pText2) {
     var container = document.createElement('div');
@@ -95,7 +96,8 @@ class BreakoutScene extends Scene {
 
         this.currentLevelNum = 0;
         this.currentLevel = new Level(this, LEVEL_COLORS[0], BRICK_COLORS, BALL_COLOR, BORDER_COLOR,
-            PLATFORM_COLOR, ROWS_PER_LEVEL[0], MIN_BRICKS_PER_ROW_PER_LEVEL[0], LIVES_PER_LEVEL[0]);
+            PLATFORM_COLOR, ROWS_PER_LEVEL[0], MIN_BRICKS_PER_ROW_PER_LEVEL[0], LIVES_PER_LEVEL[0],
+            START_SPEED_PER_LEVEL[0]);
 
         var scene = this;
 
@@ -122,9 +124,9 @@ class BreakoutScene extends Scene {
 
         // listener can be found below
         window.addEventListener("keydown", handleKeydownEvent);
-        this.gameWonContainer = createDecisionContainer("win-container", "Congratulations!", "You beat the game!",
+        this.gameWonContainer = createDecisionContainer("game-win-container", "Congratulations!", "You beat the game!",
             Happy, ":)", "Press [SPACEBAR] to play again!");
-        this.levelWonContainer = createDecisionContainer("win-container", "YAY!", "You beat this level!",
+        this.levelWonContainer = createDecisionContainer("level-win-container", "YAY!", "You beat this level!",
             Happy, ":)", "Press [SPACEBAR] to go to the next level.");
         this.gameLostContainer = createDecisionContainer("lose-container", "OH NO!", "You've lost the game!",
             Sad, ":(", "Press [SPACEBAR] to play again.");
@@ -227,8 +229,10 @@ class BreakoutScene extends Scene {
         }
 
         if (this.levelWon) {
+            console.log("level won");
             // if you win the game
-            if (this.currentLevel + 1 >= NUM_LEVELS) {
+            if (this.currentLevelNum + 1 >= NUM_LEVELS) {
+                console.log("win game");
                 this.gameWonContainer.style.visibility = "visible";
                 this.gameOver = true;
             }
@@ -261,7 +265,8 @@ class BreakoutScene extends Scene {
         }
 
         this.currentLevel = new Level(this, LEVEL_COLORS[level], BRICK_COLORS, BALL_COLOR, BORDER_COLOR, 
-            PLATFORM_COLOR, ROWS_PER_LEVEL[level], MIN_BRICKS_PER_ROW_PER_LEVEL[level], LIVES_PER_LEVEL[level]);
+            PLATFORM_COLOR, ROWS_PER_LEVEL[level], MIN_BRICKS_PER_ROW_PER_LEVEL[level], LIVES_PER_LEVEL[level],
+            START_SPEED_PER_LEVEL[level]);
     }
 }
 

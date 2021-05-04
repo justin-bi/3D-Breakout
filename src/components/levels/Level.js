@@ -5,7 +5,7 @@ import { Ball, Border, Brick, Heart, Platform } from 'objects';
 
 class Level extends Group {
     constructor(parent, backgroundColor, brickColors, ballColor, borderColor, platformColor,
-        numRows, minBricksPerRow, numLives) {
+        numRows, minBricksPerRow, numLives, startSpeedVector) {
         // Call parent Group() constructor
         super();
 
@@ -66,10 +66,10 @@ class Level extends Group {
         parent.defaultPlatformPosition = parent.platform.mesh.position.clone();
 
         // Add the ball to the scene
-        const RADIUS = 0.3;
+        const RADIUS = 0.2;
 
         const translateVec = new THREE.Vector3(0, -SPACE_BELOW_ORIGIN + PLATFORM_HEIGHT/2 + RADIUS, 0);
-        let ball = new Ball(this.parent, RADIUS, ballColor, translateVec);
+        let ball = new Ball(this.parent, RADIUS, ballColor, translateVec, startSpeedVector);
 
         parent.balls = [];
         parent.balls.push(ball);
