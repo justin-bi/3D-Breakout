@@ -25,7 +25,6 @@ class Platform extends Group {
         // add a reference to the platform object to its mesh
         this.mesh.userData.platform = this;
 
-        var ball = parent.ball;
         var platform = this.mesh;
         platform.xDist = xDistance;
         parent.add(this.mesh);

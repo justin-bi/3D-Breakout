@@ -16,6 +16,8 @@ var scene = new BreakoutScene();
 const camera = new PerspectiveCamera();
 const renderer = new WebGLRenderer({ antialias: true });
 
+const CAMERA_POS_Z = [10, 11, 12, 13, 14, 15, 16];
+
 // Set up camera
 camera.position.set(0, 1.5, 10);
 camera.lookAt(new Vector3(0, 0, 0));    // To change where this looks, look at controls.target below
@@ -30,18 +32,27 @@ document.body.appendChild(canvas);
 
 // Set up controls
 const controls = new OrbitControls(camera, canvas);
-controls.target = new Vector3(0, 1.5, 0)  // Changes where the cam focuses
+controls.target = new Vector3(0, 1.5, 0);  // Changes where the cam focuses
 controls.enableDamping = true;
 controls.enablePan = false;
 controls.minDistance = 4;
 controls.maxDistance = 16;
 controls.update();
 
+let lastLevel = 0;
+
 // Render loop
 const onAnimationFrameHandler = (timeStamp) => {
     controls.update();
     renderer.render(scene, camera);
     scene.update && scene.update(timeStamp);
+
+    // if the level has changed adjust camera
+    if (scene.currentLevelNum > lastLevel) {
+        camera.position.set(0, 1.5, CAMERA_POS_Z[[scene.currentLevelNum]]);
+    }
+
+    lastLevel = scene.currentLevelNum;
     window.requestAnimationFrame(onAnimationFrameHandler);
 };
 let id = window.requestAnimationFrame(onAnimationFrameHandler);
@@ -136,7 +147,7 @@ let handlePlayerEvent = function(event) {
         else if (!scene.levelStarted) {
             scene.levelStartContainer.style.visibility = 'hidden';
             scene.levelStarted = true;
-        }
+        } 
     }
     else if (event.key == "p") {
         if (isPaused && scene.levelStarted) {

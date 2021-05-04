@@ -71,8 +71,13 @@ td {
     height: 52vh;
 }
 
-#win-container {
+#game-win-container,
+#level-win-container {
     height: 42vh;
+}
+
+#game-win-container {
+    width: 26vw !important;
 }
 
 #lose-container {
