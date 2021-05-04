@@ -34,47 +34,32 @@ class Platform extends Group {
 
         var platform = this.mesh;
         platform.xDist = xDistance;
-        parent.add(this.mesh);
+        parent.add(platform);
 
-        let handlePlatformEvents = function(event) {
+        let handleKeydownEvents = function(event) {
             // Ignore keypresses typed into a text box
-            if (event.target.tagName === "INPUT") {
-                return;
-            }
-
+            if (event.target.tagName === "INPUT") return;
             // don't move platform unless at least one ball is moving
             if (!parent.inPlay || parent.gameOver) return;
-
-            if (event.key == "ArrowLeft"){
-                platform.leftPressed = true
-            }
-            else if (event.key == "ArrowRight"){
-                platform.rightPressed = true;
-            } 
+            else if (event.key == "ArrowLeft") platform.leftPressed = true;
+            else if (event.key == "ArrowRight") platform.rightPressed = true;
             else return;
         }
         parent.addToUpdateList(this);
 
 
-        let handleKeyUp = function(event) {
-            // Ignore keypresses typed into a text box
-            if (event.target.tagName === "INPUT") {
-                return;
-            }
-
-            // don't move platform unless at least one ball is moving
-            if (!parent.inPlay || parent.gameOver) return;
-
-            if (event.key == "ArrowLeft"){
-                platform.leftPressed = false
-            }
-            if (event.key == "ArrowRight"){
-                platform.rightPressed = false
-            }
+        let handleKeyUpEvents = function(event) {
+          // Ignore keypresses typed into a text box
+          if (event.target.tagName === "INPUT") return;
+          // don't move platform unless at least one ball is moving
+          if (!parent.inPlay || parent.gameOver) return;
+          else if (event.key == "ArrowLeft") platform.leftPressed = false;
+          else if (event.key == "ArrowRight") platform.rightPressed = false;
+          else return;
 
         }
-        window.addEventListener("keydown", handlePlatformEvents);
-        window.addEventListener("keyup", handleKeyUp);
+        window.addEventListener("keydown", handleKeydownEvents);
+        window.addEventListener("keyup", handleKeyUpEvents);
     }
 
     update(timeStamp) {
