@@ -69,7 +69,7 @@ class Level extends Group {
         const RADIUS = 0.3;
 
         const translateVec = new THREE.Vector3(0, -SPACE_BELOW_ORIGIN + PLATFORM_HEIGHT/2 + RADIUS, 0);
-        const ball = new Ball(this.parent, RADIUS, ballColor, translateVec);
+        let ball = new Ball(this.parent, RADIUS, ballColor, translateVec);
 
         parent.balls = [];
         parent.balls.push(ball);
@@ -128,8 +128,6 @@ class Level extends Group {
         let actualWidth = maxWidthOfBrick * 0.95;
         let actualHeight = maxHeightOfBrick * 0.9;
 
-        const brickGeom = new THREE.BoxGeometry(actualWidth, actualHeight, 1);
-
         // how we know which rows to alternate since either even
         // or odd will have an extra brick: extraOddBrick = 1 - extraEvenBrick
         let extraEvenBrick = 1;
@@ -151,6 +149,7 @@ class Level extends Group {
             let colorStart = Math.floor(Math.random() * this.brickColors.length);
 
             for (let j = 0; j < numBricks; j++) {
+                const brickGeom = new THREE.BoxGeometry(actualWidth, actualHeight, 1);
                 let colorIndex = (colorStart + j) % this.brickColors.length;
 
 

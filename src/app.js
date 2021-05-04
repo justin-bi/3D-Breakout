@@ -124,6 +124,9 @@ let handlePlayerEvent = function(event) {
         if (scene.gameOver) {
             window.location.reload();
         }
+        else if (scene.levelOver) {
+            scene.nextLevel();
+        }
         // if scene hasn't started yet, make the sceen go away
         else if (!scene.gameStarted) {
             instructionsContainer.style.visibility = 'hidden';
@@ -133,10 +136,6 @@ let handlePlayerEvent = function(event) {
         else if (!scene.levelStarted) {
             scene.levelStartContainer.style.visibility = 'hidden';
             scene.levelStarted = true;
-        }
-        // otherwise go on to next level
-        else {
-            scene.nextLevel();
         }
     }
     else if (event.key == "p") {

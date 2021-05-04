@@ -6,7 +6,6 @@ import * as THREE from 'three';
 
 import Happy from '../../assets/images/yay.gif';
 import Sad from '../../assets/images/noo.gif';
-import { container } from 'webpack';
 
 /* COLOR SCHEME */
 
@@ -72,9 +71,7 @@ let levelStartText = document.createElement('p');
 levelStartText.innerHTML = "Press [SPACEBAR] to start level.";
 levelStartContainer.appendChild(levelStartText);
 
-levelStartContainer.visibility = "hidden";
-
-this.levelStartContainer = levelStartContainer;
+levelStartContainer.style.visibility = "hidden";
 
 class BreakoutScene extends Scene {
     constructor() {
@@ -89,11 +86,12 @@ class BreakoutScene extends Scene {
         const lights = new BasicLights();
 
         this.add(lights);
+        this.lights = lights;
 
         levelStartTitle.innerText = "Level 1";
         levelStartTitle.style.textShadow = "5px 5px " + LEVEL_COLORS_IN_HEX[0];
 
-        this.levelStartContainer.style.visibility = 'visible';
+        this.levelStartContainer = levelStartContainer;
 
         this.currentLevelNum = 0;
         this.currentLevel = new Level(this, LEVEL_COLORS[0], BRICK_COLORS, BALL_COLOR, BORDER_COLOR, 
@@ -247,20 +245,20 @@ class BreakoutScene extends Scene {
     nextLevel() {
         let level =  ++this.currentLevelNum;
 
-        this.levelWonContainer.style.visibility = "visible";
+        this.levelWonContainer.style.visibility = "hidden";
         levelStartTitle.innerText = "Level " + (level + 1);
         levelStartTitle.style.textShadow = "5px 5px " + LEVEL_COLORS_IN_HEX[level];
 
-        this.levelStartContainer.style.visibility = "hidden";
+        this.levelStartContainer.style.visibility = "visible";
 
         // remove all of the current elements:
         for (let i = this.children.length - 1; i >= 0; i--) {
             if(this.children[i].type !== "Mesh") continue;
-                let child = this.children[i];
+            let child = this.children[i];
 
-            child.geometry.dispose();
-            child.material.dispose();
-            child.parent.remove(child);
+            this.children[i].geometry.dispose();
+            this.children[i].material.dispose();
+            this.remove(this.children[i]);
         }
 
         this.currentLevel = new Level(this, LEVEL_COLORS[level], BRICK_COLORS, BALL_COLOR, BORDER_COLOR, 

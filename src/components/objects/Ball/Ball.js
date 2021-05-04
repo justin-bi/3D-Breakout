@@ -167,9 +167,9 @@ class Ball extends Group {
                 this.mesh.position.add(this.state.vel);
 
                 if (object.name === "brick") {
-                    this.mesh.parent.removeBrick(object.userData.brick);
+                    this.parent.removeBrick(object.userData.brick);
                 } else if (object.name === "bottomBorder") {
-                    this.mesh.parent.handleBallHittingBottom(this);
+                    this.parent.handleBallHittingBottom(this);
                 }
 
                 break;
