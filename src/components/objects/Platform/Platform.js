@@ -41,8 +41,19 @@ class Platform extends Group {
             if (event.target.tagName === "INPUT") return;
             // don't move platform unless at least one ball is moving
             if (!parent.inPlay || parent.gameOver) return;
-            else if (event.key == "ArrowLeft") platform.leftPressed = true;
-            else if (event.key == "ArrowRight") platform.rightPressed = true;
+
+            const moveBegin = new TWEEN.Tween(platform.scale)
+                .to(new THREE.Vector3(1.1, 0.9, 1), 100)
+                .easing(TWEEN.Easing.Quadratic.Out);
+
+            if (event.key == "ArrowLeft") {
+                platform.leftPressed = true;
+                moveBegin.start()
+            }
+            else if (event.key == "ArrowRight") {
+                platform.rightPressed = true;
+                moveBegin.start()
+            }
             else return;
         }
         parent.addToUpdateList(this);
@@ -58,8 +69,20 @@ class Platform extends Group {
                 platform.leftPressed = false;
                 platform.rightPressed = false;
             }
-            else if (event.key == "ArrowLeft") platform.leftPressed = false;
-            else if (event.key == "ArrowRight") platform.rightPressed = false;
+
+
+            const moveEnd = new TWEEN.Tween(platform.scale)
+                .to(new THREE.Vector3(1, 1, 1), 100)
+                .easing(TWEEN.Easing.Quadratic.Out);
+
+            if (event.key == "ArrowLeft") {
+                platform.leftPressed = false;
+                moveEnd.start()
+            }
+            else if (event.key == "ArrowRight") {
+                platform.rightPressed = false;
+                moveEnd.start()
+            } 
             else return;
 
         }
@@ -83,6 +106,9 @@ class Platform extends Group {
                 mesh.position.x = mesh.xDist - mesh.width / 2
             }
         }
+
+        // Update any TWEENs
+        TWEEN.update()
     }
 }
 

@@ -1,5 +1,8 @@
 import { Group } from 'three';
 import * as THREE from 'three'
+import { TWEEN } from 'three/examples/jsm/libs/tween.module.min.js';
+
+let i = 0
 
 class Heart extends Group {
     constructor(parent, color, x, y, scale) {
@@ -19,6 +22,9 @@ class Heart extends Group {
         x -= 5 * SCALE;
         y += 5 * SCALE * 2;
 
+        // const material = new THREE.MeshBasicMaterial( { color: color } );
+        // const mesh = new THREE.Mesh( geometry, material );
+
         heartShape.moveTo( x + 5 * SCALE, y + 5 * SCALE);
         heartShape.bezierCurveTo( x + 5 * SCALE, y + 5 * SCALE, x + 4 * SCALE, y, x, y );
         heartShape.bezierCurveTo( x - 6 * SCALE, y, x - 6 * SCALE, y + 7 * SCALE, x - 6 * SCALE, y + 7 * SCALE);
@@ -28,11 +34,14 @@ class Heart extends Group {
             x + 16 * SCALE, y + 7 * SCALE);
         heartShape.bezierCurveTo( x + 16 * SCALE, y + 7 * SCALE, x + 16 * SCALE, y, x + 10 * SCALE, y );
         heartShape.bezierCurveTo( x + 7 * SCALE, y, x + 5 * SCALE, y + 5 * SCALE, x + 5 * SCALE, y + 5 * SCALE);
-
-
         const geometry = new THREE.ShapeGeometry( heartShape );
+
+        // const geometry = new THREE.ShapeGeometry( heartShape );
         const material = new THREE.MeshBasicMaterial( { color: color } );
         const mesh = new THREE.Mesh( geometry, material );
+
+        // mesh.translateX(x + 5 * SCALE)
+        // mesh.translateY(y + 5 * SCALE)
 
         this.mesh = mesh;
 
@@ -40,9 +49,22 @@ class Heart extends Group {
         this.mesh.userData.heart = this;
 
         parent.add(this.mesh);
+        parent.addToUpdateList(this);
     }
 
     remove() {
+        // TRIED SOME TWEENING STUFF, as it is it doesn't work so well because even though the 
+        // heart is in the top right, the mesh is centered at 0, 0, 0, so scaling moves the heart, not ideal
+
+        // console.log('in heart remove')
+        // console.log(this.mesh)
+
+        // const expand = new TWEEN.Tween(this.mesh.scale)
+        //     .to(this.mesh.scale.multiplyScalar(0.5), 2000)
+        //     .easing(TWEEN.Easing.Linear.None);
+
+        // expand.start()
+
         this.mesh.geometry.dispose();
         this.mesh.material.dispose();
         this.mesh.parent.remove(this.mesh);
@@ -52,6 +74,11 @@ class Heart extends Group {
 
     update(timeStamp) {
         // Put any updates you want to occur in here
+        if (i < 1) {
+            console.log('here')
+            i++
+        }
+        TWEEN.update()
     }
 }
 

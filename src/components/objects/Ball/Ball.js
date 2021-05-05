@@ -1,6 +1,7 @@
 import { Group } from 'three';
 import * as THREE from 'three'
 
+
 let ballI = 0;  // DEBUGGING tool, delete when finalizing
 
 class Ball extends Group {
@@ -208,6 +209,7 @@ class Ball extends Group {
 
             // Ensure the ball is in valid position compared to borders
             this.clampBounds()
+
         }
     }
 }
