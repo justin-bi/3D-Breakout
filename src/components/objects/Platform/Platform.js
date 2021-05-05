@@ -36,7 +36,7 @@ class Platform extends Group {
         platform.xDist = xDistance;
         parent.add(platform);
 
-        let handleKeydownEvents = function(event) {
+        let handleKeydownEvents = function (event) {
             // Ignore keypresses typed into a text box
             if (event.target.tagName === "INPUT") return;
             // don't move platform unless at least one ball is moving
@@ -48,14 +48,19 @@ class Platform extends Group {
         parent.addToUpdateList(this);
 
 
-        let handleKeyUpEvents = function(event) {
-          // Ignore keypresses typed into a text box
-          if (event.target.tagName === "INPUT") return;
-          // don't move platform unless at least one ball is moving
-          if (!parent.inPlay || parent.gameOver) return;
-          else if (event.key == "ArrowLeft") platform.leftPressed = false;
-          else if (event.key == "ArrowRight") platform.rightPressed = false;
-          else return;
+        let handleKeyUpEvents = function (event) {
+            // Ignore keypresses typed into a text box
+            if (event.target.tagName === "INPUT") return;
+            // don't move platform unless at least one ball is moving
+            if (!parent.inPlay || parent.gameOver) {
+                // When not in play, we want both of these to be false, else if they're true while the game ends, 
+                // platform keeps moving
+                platform.leftPressed = false;
+                platform.rightPressed = false;
+            }
+            else if (event.key == "ArrowLeft") platform.leftPressed = false;
+            else if (event.key == "ArrowRight") platform.rightPressed = false;
+            else return;
 
         }
         window.addEventListener("keydown", handleKeydownEvents);
