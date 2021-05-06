@@ -173,7 +173,6 @@ class Ball extends Group {
                 //
                 var audio = new Audio(mus)
                 audio.play()
-                console.log(mus)
                 //
 
             }
