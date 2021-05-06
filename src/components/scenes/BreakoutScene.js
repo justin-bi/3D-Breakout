@@ -7,6 +7,7 @@ import * as THREE from 'three';
 import Happy from '../../assets/images/yay.gif';
 import Sad from '../../assets/images/noo.gif';
 
+
 /* COLOR SCHEME */
 
 // colors for the bricks
@@ -155,8 +156,6 @@ class BreakoutScene extends Scene {
      */
     removeBrick(brick) {
         brick.mesh.collidable = false;
-        console.log(brick);
-        console.log(this.bricksLeft);
         this.bricksLeft--;
         brick.breakBrick();
 
