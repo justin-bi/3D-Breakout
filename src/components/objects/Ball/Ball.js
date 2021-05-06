@@ -148,11 +148,8 @@ class Ball extends Group {
             // In here, just collect the collision results
             if (collisionResults.length > 0 && collisionResults[0].distance < dirVec.length()
                 && collisionResults[0].object.collidable !== false) {
-                collisionResults[0].dirVec = dirVec.clone()
-                collisions.push(collisionResults[0])
-                if (collisionResults[0].object.name === "brick") {
-                    // console.log(collisionResults[0].object)
-                }
+                collisionResults[0].dirVec = dirVec.clone();
+                collisions.push(collisionResults[0]);
             }
         }
 
@@ -195,7 +192,7 @@ class Ball extends Group {
                 this.mesh.position.y = Math.max(this.mesh.position.y, guaranteedHeight)
 
                 const halfWidth = object.geometry.parameters.width / 2
-                const offset = (this.mesh.position.x - object.position.x) / halfWidth  // Offset in [-1, 1]
+                const offset = (this.mesh.position.x - object.position.x) / halfWidth;  // Offset in [-1, 1]
 
                 let percent;
                 let newAngle;
@@ -233,7 +230,6 @@ class Ball extends Group {
             this.mesh.position.add(this.state.vel);
 
             if (object.name === "brick" && object.collidable !== false) {
-                console.log(object)
                 this.parent.removeBrick(object.userData.brick);
             } else if (object.name === "bottomBorder") {
                 this.parent.handleBallHittingBottom(this);

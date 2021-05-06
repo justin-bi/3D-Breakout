@@ -5,7 +5,7 @@ import { Ball, Border, Brick, Heart, Platform } from 'objects';
 
 class Level extends Group {
     constructor(parent, backgroundColor, brickColors, ballColor, borderColor, platformColor,
-        numRows, minBricksPerRow, numLives, startSpeedVector) {
+        numRows, minBricksPerRow, numLives, startSpeedVector, platformSpeed) {
         // Call parent Group() constructor
         super();
 
@@ -60,7 +60,7 @@ class Level extends Group {
         const PLATFORM_WIDTH = Math.min((0.33 * MAX_WIDTH_OF_BRICKS * maxBricksPerRow), 5);
 
         parent.platform = new Platform(parent, platformColor, PLATFORM_WIDTH,
-            PLATFORM_HEIGHT, SPACE_BELOW_ORIGIN, xDistance);    // Pass in xDistance to set limits
+            PLATFORM_HEIGHT, SPACE_BELOW_ORIGIN, xDistance, platformSpeed);    // Pass in xDistance to set limits
 
         // save the beginning platform position for this game
         parent.defaultPlatformPosition = parent.platform.mesh.position.clone();

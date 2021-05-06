@@ -4,7 +4,7 @@ import { TWEEN } from 'three/examples/jsm/libs/tween.module.min.js';
 import * as THREE from 'three'; // Probably need to change later, doing this for now for simplicity
 
 class Platform extends Group {
-    constructor(parent, color, width, height, yPosition, xDistance) {
+    constructor(parent, color, width, height, yPosition, xDistance, speed) {
         // Call parent Group() constructor
         super();
 
@@ -13,7 +13,7 @@ class Platform extends Group {
             // Empty for now, can populate later if wanted
         };
 
-        this.xDist = xDistance
+        this.xDist = xDistance;
         this.name = 'paddle';
 
         const geometry = new THREE.BoxGeometry(width, height, 1);
@@ -21,13 +21,12 @@ class Platform extends Group {
         this.mesh = new THREE.Mesh(geometry, material);
         this.mesh.name = 'paddle';
         this.mesh.translateY(-yPosition);
-        this.mesh.width = width
+        this.mesh.width = width;
 
         // Fields related to platform movement
         this.mesh.leftPressed = false;
         this.mesh.rightPressed = false;
-        this.mesh.speed = 0.1;
-        // console.log(this)
+        this.mesh.speed = speed;
 
         // add a reference to the platform object to its mesh
         this.mesh.userData.platform = this;
@@ -70,7 +69,6 @@ class Platform extends Group {
                 platform.rightPressed = false;
             }
 
-
             const moveEnd = new TWEEN.Tween(platform.scale)
                 .to(new THREE.Vector3(1, 1, 1), 100)
                 .easing(TWEEN.Easing.Quadratic.Out);
@@ -91,19 +89,19 @@ class Platform extends Group {
     }
 
     update(timeStamp) {
-        const mesh = this.mesh
+        const mesh = this.mesh;
         if (mesh.leftPressed) {
             mesh.translateX(-mesh.speed);
             // This code makes sure no part of the platform exits the borders
             if (mesh.position.x < -mesh.xDist + mesh.width / 2) {
-                mesh.position.x = -mesh.xDist + mesh.width / 2
+                mesh.position.x = -mesh.xDist + mesh.width / 2;
             }
         }
         if (mesh.rightPressed) {
             mesh.translateX(mesh.speed);
             // This code makes sure no part of the platform exits the borders
             if (mesh.position.x > mesh.xDist - mesh.width / 2) {
-                mesh.position.x = mesh.xDist - mesh.width / 2
+                mesh.position.x = mesh.xDist - mesh.width / 2;
             }
         }
 

@@ -32,7 +32,7 @@ class Brick extends Group {
 
     breakBrick() {
         const shrink = new TWEEN.Tween(this.mesh.scale)
-        .to(new THREE.Vector3(0, 0, 0), 300)
+        .to(new THREE.Vector3(0, 0, 0), 200)
         .easing(TWEEN.Easing.Back.In);
 
         shrink.onComplete(() => {
@@ -41,7 +41,7 @@ class Brick extends Group {
             try{
                 this.mesh.parent.remove(this.mesh);
             } catch(err) {
-                console.log(err)
+                console.log(err);
             }
         });
 

@@ -29,8 +29,9 @@ const LEVEL_COLORS_IN_HEX = ["#CAF0F8", "#90E0EF", "#00B4D8", "0096C7", "0077B6"
 const ROWS_PER_LEVEL = [2, 3, 4, 5, 6, 7, 7];
 const MIN_BRICKS_PER_ROW_PER_LEVEL = [3, 4, 4, 5, 5, 6, 6];
 const START_SPEED_PER_LEVEL = [new THREE.Vector3(-0.05, 0.05, 0), new THREE.Vector3(-0.05, 0.05, 0),
-    new THREE.Vector3(-0.06, 0.06, 0), new THREE.Vector3(-0.07, 0.07, 0), new THREE.Vector3(-0.08, 0.08, 0),
-    new THREE.Vector3(-0.09, 0.09, 0), new THREE.Vector3(-0.1, 0.1, 0)];
+    new THREE.Vector3(-0.06, 0.06, 0), new THREE.Vector3(-0.06, 0.06, 0), new THREE.Vector3(-0.07, 0.07, 0),
+    new THREE.Vector3(-0.07, 0.07, 0), new THREE.Vector3(-0.08, 0.08, 0)];
+const PLATFORM_SPEED_PER_LEVEL = [0.1, 0.1, 0.11, 0.11, 0.12, 0.12, 0.13];
 
 // temporary start speed till we improve collisions
 const START_SPEED = new THREE.Vector3(-0.05, 0.05, 0);
@@ -100,7 +101,7 @@ class BreakoutScene extends Scene {
         this.currentLevelNum = 0;
         this.currentLevel = new Level(this, LEVEL_COLORS[0], BRICK_COLORS, BALL_COLOR, BORDER_COLOR,
             PLATFORM_COLOR, ROWS_PER_LEVEL[0], MIN_BRICKS_PER_ROW_PER_LEVEL[0], NUM_LIVES_AT_START,
-            START_SPEED_PER_LEVEL[0]);
+            START_SPEED_PER_LEVEL[0], PLATFORM_SPEED_PER_LEVEL[0]);
 
         var scene = this;
 
@@ -155,8 +156,6 @@ class BreakoutScene extends Scene {
      */
     removeBrick(brick) {
         brick.mesh.collidable = false;
-        console.log(brick);
-        console.log(this.bricksLeft);
         this.bricksLeft--;
         brick.breakBrick();
 
@@ -277,7 +276,7 @@ class BreakoutScene extends Scene {
         */
             this.currentLevel = new Level(this, LEVEL_COLORS[level], BRICK_COLORS, BALL_COLOR, BORDER_COLOR, 
                 PLATFORM_COLOR, ROWS_PER_LEVEL[level], MIN_BRICKS_PER_ROW_PER_LEVEL[level], this.livesLeft,
-                START_SPEED_PER_LEVEL[level]);
+                START_SPEED_PER_LEVEL[level], PLATFORM_SPEED_PER_LEVEL[level]);
     }
 }
 
