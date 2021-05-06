@@ -106,10 +106,11 @@ class Ball extends Group {
     }
 
     // Initiate the tweening of colors
-    changeColors() {
+    changeColors(object) {
+        if (object == null) return;
 
         const lighten = new TWEEN.Tween(this.mesh.material.color)
-            .to(this.mesh.material.color.clone().addScalar(0.3), 100)
+            .to(object.material.color.clone().addScalar(0.3), 100)
             .easing(TWEEN.Easing.Exponential.Out);
 
         const darken = new TWEEN.Tween(this.mesh.material.color)
@@ -135,7 +136,7 @@ class Ball extends Group {
         // Collision code from here: https://stackoverflow.com/questions/11473755/how-to-detect-collision-in-three-js
 
         // First, collect all the collisions to sort (makes for better collisions when sorted)
-        const collisions = []
+        const collisions = [];
         for (let vi = 0; vi < this.verts.length; vi++) {
             // Not sure if applyMat4 needed, but here for thoroughness
             const globalVert = this.verts[vi].clone().applyMatrix4(this.mesh.matrix);
@@ -159,7 +160,7 @@ class Ball extends Group {
         if (collisions.length > 0) {
 
             // Test changing the color
-            this.changeColors()
+            this.changeColors(collisions[0].object);
 
             collisions.sort((a, b) => (a.distance > b.distance) ? 1 : -1)
             // If collided, first move ball back to its position one timestep BEFORE the collisions, 
