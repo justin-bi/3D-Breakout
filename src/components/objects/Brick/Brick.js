@@ -33,7 +33,7 @@ class Brick extends Group {
     breakBrick() {
         this.collidable = false;
         const shrink = new TWEEN.Tween(this.mesh.scale)
-        .to(new THREE.Vector3(0, 0, 0), 500)
+        .to(new THREE.Vector3(0, 0, 0), 300)
         .easing(TWEEN.Easing.Back.In);
 
         shrink.onComplete(() => {
