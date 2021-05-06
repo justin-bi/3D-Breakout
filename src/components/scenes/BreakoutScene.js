@@ -100,7 +100,7 @@ class BreakoutScene extends Scene {
         this.currentLevelNum = 0;
         this.currentLevel = new Level(this, LEVEL_COLORS[0], BRICK_COLORS, BALL_COLOR, BORDER_COLOR,
             PLATFORM_COLOR, ROWS_PER_LEVEL[0], MIN_BRICKS_PER_ROW_PER_LEVEL[0], NUM_LIVES_AT_START,
-            START_SPEED);
+            START_SPEED_PER_LEVEL[0]);
 
         var scene = this;
 
@@ -267,9 +267,14 @@ class BreakoutScene extends Scene {
             this.remove(this.children[i]);
         }
 
+        /*
         this.currentLevel = new Level(this, LEVEL_COLORS[level], BRICK_COLORS, BALL_COLOR, BORDER_COLOR, 
             PLATFORM_COLOR, ROWS_PER_LEVEL[level], MIN_BRICKS_PER_ROW_PER_LEVEL[level], this.livesLeft,
             START_SPEED);
+        */
+            this.currentLevel = new Level(this, LEVEL_COLORS[level], BRICK_COLORS, BALL_COLOR, BORDER_COLOR, 
+                PLATFORM_COLOR, ROWS_PER_LEVEL[level], MIN_BRICKS_PER_ROW_PER_LEVEL[level], this.livesLeft,
+                START_SPEED_PER_LEVEL[level]);
     }
 }
 
