@@ -4,6 +4,9 @@ import { Level } from 'levels';
 import { BasicLights } from 'lights';
 import * as THREE from 'three';
 
+import LevelWinSound from '../../assets/sounds/winSound.mp3';
+import GameWinSound from '../../assets/sounds/gameWin.mp3';
+import GameOverSound from '../../assets/sounds/gameOver.mp3';
 import Happy from '../../assets/images/yay.gif';
 import Sad from '../../assets/images/noo.gif';
 
@@ -241,14 +244,24 @@ class BreakoutScene extends Scene {
             if (this.currentLevelNum + 1 >= NUM_LEVELS) {
                 this.gameWonContainer.style.visibility = "visible";
                 this.gameOver = true;
+
+                var gameWinSound = new Audio(GameWinSound);
+                gameWinSound.play();
             }
             // if you just win the level
-            else
+            else {
                 this.levelWonContainer.style.visibility = "visible";
+
+                var levelWinSound = new Audio(LevelWinSound);
+                levelWinSound.play();
+            }
         }
         else {
             this.gameLostContainer.style.visibility = "visible";
             this.gameOver = true;
+
+            var gameOverSound = new Audio(GameOverSound);
+            gameOverSound.play();
         }
     }
 
@@ -270,14 +283,10 @@ class BreakoutScene extends Scene {
             this.remove(this.children[i]);
         }
 
-        /*
+
         this.currentLevel = new Level(this, LEVEL_COLORS[level], BRICK_COLORS, BALL_COLOR, BORDER_COLOR, 
             PLATFORM_COLOR, ROWS_PER_LEVEL[level], MIN_BRICKS_PER_ROW_PER_LEVEL[level], this.livesLeft,
-            START_SPEED);
-        */
-            this.currentLevel = new Level(this, LEVEL_COLORS[level], BRICK_COLORS, BALL_COLOR, BORDER_COLOR, 
-                PLATFORM_COLOR, ROWS_PER_LEVEL[level], MIN_BRICKS_PER_ROW_PER_LEVEL[level], this.livesLeft,
-                START_SPEED_PER_LEVEL[level], PLATFORM_SPEED_PER_LEVEL[level]);
+            START_SPEED_PER_LEVEL[level], PLATFORM_SPEED_PER_LEVEL[level]);
     }
 }
 

@@ -164,14 +164,12 @@ class Ball extends Group {
             // The object the ball collides with
             const object = collisions[0].object;
 
-            // Test changing the color
+            // change color and add audio 
             if (object.name !== "bottomBorder") {
                 this.changeColors(collisions[0].object);
-                //
-                var audio = new Audio(mus)
-                audio.play()
-                //
 
+                var audio = new Audio(mus);
+                audio.play();
             }
 
             // Grab the angle of the closest dirVec collided with in degrees (use unit circle degrees)
@@ -205,7 +203,7 @@ class Ball extends Group {
                 let newAngle;
                 let onLeft;
                 let inMiddle = true;
-                const cutoff = 0.1
+                const cutoff = 0.1;
 
                 if (offset > cutoff && object.rightPressed) {
                     percent = (offset - cutoff) / (1 - cutoff)  // val in [0, 1]
@@ -243,7 +241,7 @@ class Ball extends Group {
             }
 
             // Ensure the ball is in valid position compared to borders
-            this.clampBounds()
+            this.clampBounds();
 
         }
     }

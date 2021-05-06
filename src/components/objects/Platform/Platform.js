@@ -47,11 +47,11 @@ class Platform extends Group {
 
             if (event.key == "ArrowLeft") {
                 platform.leftPressed = true;
-                moveBegin.start()
+                moveBegin.start();
             }
             else if (event.key == "ArrowRight") {
                 platform.rightPressed = true;
-                moveBegin.start()
+                moveBegin.start();
             }
             else return;
         }
@@ -106,7 +106,7 @@ class Platform extends Group {
         }
 
         // Update any TWEENs
-        TWEEN.update()
+        TWEEN.update();
     }
 }
 
