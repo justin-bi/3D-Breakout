@@ -1,5 +1,6 @@
 import { Group } from 'three';
 import * as THREE from 'three'
+import { TWEEN } from 'three/examples/jsm/libs/tween.module.min';
 
 
 let ballI = 0;  // DEBUGGING tool, delete when finalizing
@@ -36,7 +37,8 @@ class Ball extends Group {
         this.minAngle = 30;
         this.maxAngle = 60;
 
-        const material = new THREE.MeshPhongMaterial({color: color, flatShading: true});
+        const material = new THREE.MeshPhongMaterial({ color: color, flatShading: true });
+        this.origColor = material.color.clone();    // For color tweening
 
         // keeps track of whether ball is moving
         this.moving = false;
@@ -103,7 +105,26 @@ class Ball extends Group {
         this.position.y = Math.max(this.minY, Math.min(this.maxY, this.position.y)); // Clamp y
     }
 
+    // Initiate the tweening of colors
+    changeColors() {
+
+        const lighten = new TWEEN.Tween(this.mesh.material.color)
+            .to(this.mesh.material.color.clone().addScalar(0.3), 100)
+            .easing(TWEEN.Easing.Exponential.Out);
+
+        const darken = new TWEEN.Tween(this.mesh.material.color)
+            .to(this.origColor.clone(), 400)
+            .easing(TWEEN.Easing.Linear.None);
+
+        lighten.onComplete(() => darken.start());
+
+        lighten.start()
+    }
+
     update(timeStamp) {
+
+        // Update any TWEEN stuff
+        TWEEN.update()
 
         // if the ball has not begun moving, do not start yet
         if (!this.moving) return;
@@ -124,7 +145,8 @@ class Ball extends Group {
             const collisionResults = rayCast.intersectObjects(this.parent.children);
 
             // In here, just collect the collision results
-            if (collisionResults.length > 0 && collisionResults[0].distance < dirVec.length()) {
+            if (collisionResults.length > 0 && collisionResults[0].distance < dirVec.length()
+                && collisionResults[0].object.collidable !== false) {
                 collisionResults[0].dirVec = dirVec.clone()
                 collisions.push(collisionResults[0])
             }
@@ -132,6 +154,10 @@ class Ball extends Group {
 
         // If there are any collisions, sort them then handle them
         if (collisions.length > 0) {
+
+            // Test changing the color
+            this.changeColors()
+
             collisions.sort((a, b) => (a.distance > b.distance) ? 1 : -1)
             // If collided, first move ball back to its position one timestep BEFORE the collisions, 
             // guaranteed to not be in a collision at this point
@@ -158,6 +184,7 @@ class Ball extends Group {
             }
 
             if (object.name === "paddle") {
+
                 // This code makes sure that if the ball is colliding with the paddle, it ensures that the ball ends up 
                 // outside the paddle
                 const guaranteedHeight = object.position.y + (object.geometry.parameters.height / 2) + this.radius;
