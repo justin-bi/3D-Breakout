@@ -150,6 +150,9 @@ class Ball extends Group {
                 && collisionResults[0].object.collidable !== false) {
                 collisionResults[0].dirVec = dirVec.clone()
                 collisions.push(collisionResults[0])
+                if (collisionResults[0].object.name === "brick") {
+                    // console.log(collisionResults[0].object)
+                }
             }
         }
 
@@ -229,7 +232,8 @@ class Ball extends Group {
 
             this.mesh.position.add(this.state.vel);
 
-            if (object.name === "brick") {
+            if (object.name === "brick" && object.collidable !== false) {
+                console.log(object)
                 this.parent.removeBrick(object.userData.brick);
             } else if (object.name === "bottomBorder") {
                 this.parent.handleBallHittingBottom(this);
