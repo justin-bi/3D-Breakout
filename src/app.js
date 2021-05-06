@@ -9,7 +9,7 @@
 import { WebGLRenderer, PerspectiveCamera, Vector3 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { BreakoutScene } from './components/scenes';
-import './css/style.css'
+import './assets/css/style.css'
 
 // Initialize core ThreeJS components
 var scene = new BreakoutScene();
@@ -147,7 +147,7 @@ let handlePlayerEvent = function(event) {
         else if (!scene.levelStarted) {
             scene.levelStartContainer.style.visibility = 'hidden';
             scene.levelStarted = true;
-        } 
+        }
     }
     else if (event.key == "p") {
         if (isPaused && scene.levelStarted) {
