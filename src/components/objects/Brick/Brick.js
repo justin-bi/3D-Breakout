@@ -41,7 +41,8 @@ class Brick extends Group {
             try{
                 this.mesh.parent.remove(this.mesh);
             } catch(err) {
-                console.log(err);
+                console.log(this);
+                console.warn(err);
             }
         });
 

@@ -1,7 +1,7 @@
 import { Group } from 'three';
 import * as THREE from 'three'
 import { TWEEN } from 'three/examples/jsm/libs/tween.module.min';
-
+import mus from './pong.ogg'
 
 let ballI = 0;  // DEBUGGING tool, delete when finalizing
 
@@ -156,9 +156,6 @@ class Ball extends Group {
         // If there are any collisions, sort them then handle them
         if (collisions.length > 0) {
 
-            // Test changing the color
-            this.changeColors(collisions[0].object);
-
             collisions.sort((a, b) => (a.distance > b.distance) ? 1 : -1)
             // If collided, first move ball back to its position one timestep BEFORE the collisions, 
             // guaranteed to not be in a collision at this point
@@ -166,6 +163,16 @@ class Ball extends Group {
 
             // The object the ball collides with
             const object = collisions[0].object;
+
+            // Test changing the color
+            if (object.name !== "bottomBorder") {
+                this.changeColors(collisions[0].object);
+                //
+                var audio = new Audio(mus)
+                audio.play()
+                //
+
+            }
 
             // Grab the angle of the closest dirVec collided with in degrees (use unit circle degrees)
             const angle = collisions[0].dirVec.clone().angleTo(new THREE.Vector3(1, 0, 0)) / Math.PI * 180

@@ -7,6 +7,7 @@ import * as THREE from 'three';
 import Happy from '../../assets/images/yay.gif';
 import Sad from '../../assets/images/noo.gif';
 
+
 /* COLOR SCHEME */
 
 // colors for the bricks
