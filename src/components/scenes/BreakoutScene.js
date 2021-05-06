@@ -154,6 +154,9 @@ class BreakoutScene extends Scene {
      * reduces the number of overall bricks.
      */
     removeBrick(brick) {
+        brick.mesh.collidable = false;
+        console.log(brick);
+        console.log(this.bricksLeft);
         this.bricksLeft--;
         brick.breakBrick();
 
