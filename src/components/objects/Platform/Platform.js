@@ -26,7 +26,7 @@ class Platform extends Group {
         // Fields related to platform movement
         this.mesh.leftPressed = false;
         this.mesh.rightPressed = false;
-        this.mesh.speed = 0.1
+        this.mesh.speed = 0.1;
         // console.log(this)
 
         // add a reference to the platform object to its mesh
@@ -77,11 +77,11 @@ class Platform extends Group {
 
             if (event.key == "ArrowLeft") {
                 platform.leftPressed = false;
-                moveEnd.start()
+                moveEnd.start();
             }
             else if (event.key == "ArrowRight") {
                 platform.rightPressed = false;
-                moveEnd.start()
+                moveEnd.start();
             } 
             else return;
 

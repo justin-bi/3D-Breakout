@@ -155,7 +155,7 @@ class BreakoutScene extends Scene {
      */
     removeBrick(brick) {
         this.bricksLeft--;
-        brick.remove();
+        brick.breakBrick();
 
         if (this.bricksLeft <= 0) {
             this.levelWon = true;

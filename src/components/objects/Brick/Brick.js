@@ -1,5 +1,7 @@
 import { Group } from 'three';
-import * as THREE from 'three'
+import * as THREE from 'three';
+import { TWEEN } from 'three/examples/jsm/libs/tween.module.min.js';
+
 
 // The bricks that the ball breaks
 class Brick extends Group {
@@ -28,12 +30,18 @@ class Brick extends Group {
         parent.addToUpdateList(this);
     }
 
-    remove() {
-        this.mesh.geometry.dispose();
-        this.mesh.material.dispose();
-        this.mesh.parent.remove(this.mesh);
+    breakBrick() {
+        const shrink = new TWEEN.Tween(this.mesh.scale)
+        .to(new THREE.Vector3(0, 0, 0), 500)
+        .easing(TWEEN.Easing.Back.In);
 
-        // TODO: make this cooler (perhaps make it into little blocks then have them drop)
+        shrink.onComplete(() => {
+            this.mesh.geometry.dispose();
+            this.mesh.material.dispose();
+            this.mesh.parent.remove(this.mesh);
+        });
+
+        shrink.start();
     }
 
     update(timeStamp) {

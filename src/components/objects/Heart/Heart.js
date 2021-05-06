@@ -17,18 +17,11 @@ class Heart extends Group {
         let SCALE = -scale;
 
         // adjust for the x and y values
-        // x -= 5 * SCALE;
-        // y += 5 * SCALE * 2;
+        let savedX = x;
+        let savedY = y;
 
-        let savedX = x
-        let savedY = y
-
-        x = 5 * -SCALE
-        y = 5 * -SCALE
-        // SCALE = 0;
-
-        // const material = new THREE.MeshBasicMaterial( { color: color } );
-        // const mesh = new THREE.Mesh( geometry, material );
+        x = 5 * -SCALE;
+        y = 5 * -SCALE;
 
         heartShape.moveTo(x + 5 * SCALE, y + 5 * SCALE);
         heartShape.bezierCurveTo(x + 5 * SCALE, y + 5 * SCALE, x + 4 * SCALE, y, x, y);
@@ -47,11 +40,6 @@ class Heart extends Group {
         mesh.translateX(savedX + 5 * SCALE)
         mesh.translateY(savedY + 5 * SCALE)
 
-        // mesh.scale.multiplyScalar(0.03)
-
-        // mesh.translateX(x + 5 * SCALE)
-        // mesh.translateY(y + 5 * SCALE)
-
         this.mesh = mesh;
 
         this.mesh.name = "heart";
@@ -64,8 +52,8 @@ class Heart extends Group {
     remove() {
 
         const shrink = new TWEEN.Tween(this.mesh.scale)
-            .to(new THREE.Vector3(0, 0, 0), 500) 
-            .easing(TWEEN.Easing.Back.In)
+            .to(new THREE.Vector3(0, 0, 0), 500)
+            .easing(TWEEN.Easing.Back.In);
 
         shrink.onComplete(() => {
             this.mesh.geometry.dispose();
@@ -73,9 +61,7 @@ class Heart extends Group {
             this.mesh.parent.remove(this.mesh);
         })
 
-        shrink.start()
-
-        // TODO: make this cooler (perhaps make it into little blocks then have them drop)
+        shrink.start();
     }
 
     update(timeStamp) {
