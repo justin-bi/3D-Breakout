@@ -146,19 +146,21 @@ let handlePlayerEvent = function (event) {
             const LEVEL_COLORS = [0xCAF0F8, 0x90E0EF, 0x00B4D8, 0x0096C7, 0x0077B6, 0x023E8A, 0x03045E];
             // Tween for camera? Could be fun haha
             const viewRise = new TWEEN.Tween(controls.target)
-                .to(new THREE.Vector3(0, 8.5, 0), 500)
+                .to(new THREE.Vector3(0, 10, 0), 700)
                 .easing(TWEEN.Easing.Quadratic.Out);
             const camRise = new TWEEN.Tween(camera.position)
-                .to(new THREE.Vector3(0, 8.5, 10), 500)
+                .to(new THREE.Vector3(0, 10, 10), 700)
                 .easing(TWEEN.Easing.Quadratic.Out);
 
             const viewFall = new TWEEN.Tween(controls.target)
                 .to(new THREE.Vector3(0, 1.5, 0), 700)
-                .easing(TWEEN.Easing.Back.Out);
+                // .easing(TWEEN.Easing.Back.Out);
+                .easing(TWEEN.Easing.Quadratic.In);
 
             const camFall = new TWEEN.Tween(camera.position)
                 .to(new THREE.Vector3(0, 1.5, 10), 700)
-                .easing(TWEEN.Easing.Back.Out);
+                // .easing(TWEEN.Easing.Back.Out);
+                .easing(TWEEN.Easing.Quadratic.In);
 
             let newCol = new Color(LEVEL_COLORS[scene.currentLevelNum + 1]);
             console.log(newCol);
