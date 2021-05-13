@@ -10,6 +10,10 @@ import { WebGLRenderer, PerspectiveCamera, Vector3 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { BreakoutScene } from './components/scenes';
 import './assets/css/style.css'
+import loopedMus from './assets/sounds/loop-mus.mp3';
+import { TWEEN } from 'three/examples/jsm/libs/tween.module.min';
+import * as THREE from 'three'
+import { Color } from 'three';
 
 // Initialize core ThreeJS components
 var scene = new BreakoutScene();
@@ -43,6 +47,7 @@ let lastLevel = 0;
 
 // Render loop
 const onAnimationFrameHandler = (timeStamp) => {
+    TWEEN.update();
     controls.update();
     renderer.render(scene, camera);
     scene.update && scene.update(timeStamp);
@@ -66,7 +71,6 @@ const windowResizeHandler = () => {
 };
 windowResizeHandler();
 window.addEventListener('resize', windowResizeHandler, false);
-
 
 // make title
 let titleContainer = document.createElement('div');
@@ -124,7 +128,10 @@ mouse.insertCell(1).innerHTML = "Change perspective";
 // and reappears when the game is paused
 var isPaused = false;
 
-let handlePlayerEvent = function(event) {
+// Music to loop, plays when game starts
+var loopMus = new Audio(loopedMus);
+
+let handlePlayerEvent = function (event) {
     // Ignore keypresses typed into a text box
     if (event.target.tagName === "INPUT") {
         return;
@@ -136,13 +143,53 @@ let handlePlayerEvent = function(event) {
             window.location.reload();
         }
         else if (scene.levelOver) {
-            scene.nextLevel();
+            const LEVEL_COLORS = [0xCAF0F8, 0x90E0EF, 0x00B4D8, 0x0096C7, 0x0077B6, 0x023E8A, 0x03045E];
+            // Tween for camera? Could be fun haha
+            const viewRise = new TWEEN.Tween(controls.target)
+                .to(new THREE.Vector3(0, 8.5, 0), 500)
+                .easing(TWEEN.Easing.Quadratic.Out);
+            const camRise = new TWEEN.Tween(camera.position)
+                .to(new THREE.Vector3(0, 8.5, 10), 500)
+                .easing(TWEEN.Easing.Quadratic.Out);
+
+            const viewFall = new TWEEN.Tween(controls.target)
+                .to(new THREE.Vector3(0, 1.5, 0), 700)
+                .easing(TWEEN.Easing.Back.Out);
+
+            const camFall = new TWEEN.Tween(camera.position)
+                .to(new THREE.Vector3(0, 1.5, 10), 700)
+                .easing(TWEEN.Easing.Back.Out);
+
+            let newCol = new Color(LEVEL_COLORS[scene.currentLevelNum + 1]);
+            console.log(newCol);
+            const colorChange = new TWEEN.Tween(scene.background)
+                .to(newCol, 500)
+                .easing(TWEEN.Easing.Linear.None);
+
+            camRise.onComplete(() => {
+                scene.nextLevel();
+                console.log(scene.background)
+                camFall.start();
+                viewFall.start();
+            })
+
+            camRise.start();
+            viewRise.start();
+            colorChange.start();
+
         }
         // if scene hasn't started yet, make the sceen go away
         else if (!scene.gameStarted) {
             instructionsContainer.style.visibility = 'hidden';
             scene.levelStartContainer.style.visibility = 'visible';
             scene.gameStarted = true;
+            // Start the game music in here, since autoplay isn't allowed
+            if (!loopMus.isPlaying) {
+                loopMus.volume = 0.4;
+                loopMus.playbackRate = 0.9;
+                loopMus.loop = true;
+                loopMus.play();
+            }
         }
         else if (!scene.levelStarted) {
             scene.levelStartContainer.style.visibility = 'hidden';
@@ -151,10 +198,12 @@ let handlePlayerEvent = function(event) {
     }
     else if (event.key == "p") {
         if (isPaused && scene.levelStarted) {
+            loopMus.volume = 0.4; // If it's getting unpaused, turn the volume up again. 
             instructionsContainer.style.visibility = 'hidden';
         }
         else {
             instructionsContainer.style.visibility = 'visible';
+            loopMus.volume = 0.1;
         }
 
         isPaused = !isPaused;
@@ -162,3 +211,5 @@ let handlePlayerEvent = function(event) {
     else return;
 }
 window.addEventListener("keydown", handlePlayerEvent);
+
+
