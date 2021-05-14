@@ -1,4 +1,3 @@
-import * as Dat from 'dat.gui';
 import { Scene } from 'three';
 import { Level } from 'levels';
 import { BasicLights } from 'lights';
@@ -37,9 +36,6 @@ const START_SPEED_PER_LEVEL = [new THREE.Vector3(-0.05, 0.05, 0), new THREE.Vect
     new THREE.Vector3(-0.06, 0.06, 0), new THREE.Vector3(-0.06, 0.06, 0), new THREE.Vector3(-0.07, 0.07, 0),
     new THREE.Vector3(-0.07, 0.07, 0), new THREE.Vector3(-0.08, 0.08, 0)];
 const PLATFORM_SPEED_PER_LEVEL = [0.1, 0.1, 0.11, 0.11, 0.12, 0.12, 0.13];
-
-// temporary start speed till we improve collisions
-const START_SPEED = new THREE.Vector3(-0.05, 0.05, 0);
 
 let createDecisionContainer = function(id, h1Text, pText1, image, imgAlt, pText2) {
     var container = document.createElement('div');
@@ -97,13 +93,13 @@ class BreakoutScene extends Scene {
         this.add(lights);
         this.lights = lights;
 
-        // Included the camera in here to see what it sees
+        // Included the camera in here to see if objects are in its view
         this.camera = camera;
 
         // Add in points variable
         this.points = 0;
 
-        // Testing multiplier stuff
+        // Add in multiplier objects, should persist through levels
         this.multipliers = []
         this.multipliers.push(new Multiplier(this, 1, true))
         this.multipliers.push(new Multiplier(this, 1, false))
@@ -174,10 +170,13 @@ class BreakoutScene extends Scene {
         this.bricksLeft--;
         brick.breakBrick();
 
+        // Check to see if the multipliers are in view to determine how many points to add
         this.camera.updateMatrix();
         this.camera.updateMatrixWorld();
-        var frustum = new THREE.Frustum();
-        frustum.setFromProjectionMatrix(new THREE.Matrix4().multiplyMatrices(this.camera.projectionMatrix, this.camera.matrixWorldInverse));
+        const frustum = new THREE.Frustum();
+        frustum.setFromProjectionMatrix(
+            new THREE.Matrix4().multiplyMatrices(this.camera.projectionMatrix, this.camera.matrixWorldInverse)
+        );
 
         let pointsToAdd = 1;
         this.multipliers.forEach((m) => {
@@ -188,7 +187,6 @@ class BreakoutScene extends Scene {
 
         this.points += pointsToAdd;
 
-        
         if (this.bricksLeft <= 0) {
             this.levelWon = true;
             this.endLevel();
@@ -257,6 +255,7 @@ class BreakoutScene extends Scene {
         this.platform.mesh.rightPressed = false;
     }
 
+    // Handles what happens when the level ends
     endLevel() {
         this.inPlay = false;
         this.levelOver = true;
@@ -291,6 +290,7 @@ class BreakoutScene extends Scene {
         }
     }
 
+    // Transitions the scene to the next level
     nextLevel() {
         let level =  ++this.currentLevelNum;
 
@@ -310,7 +310,6 @@ class BreakoutScene extends Scene {
             this.children[i].material.dispose();
             this.remove(this.children[i]);
         }
-
 
         this.currentLevel = new Level(this, LEVEL_COLORS[level], BRICK_COLORS, BALL_COLOR, BORDER_COLOR, 
             PLATFORM_COLOR, ROWS_PER_LEVEL[level], MIN_BRICKS_PER_ROW_PER_LEVEL[level], this.livesLeft,

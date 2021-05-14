@@ -6,7 +6,7 @@ import { TWEEN } from 'three/examples/jsm/libs/tween.module.min';
 
 // and the import from BreakoutScene.js
 class Multiplier extends Group {
-    constructor(parent, radius, isTimes2) {
+    constructor(parent, width, isTimes2) {
         // Call parent Group() constructor
         super();
 
@@ -15,14 +15,14 @@ class Multiplier extends Group {
             // Put any state things you want here
         };
 
-        const geometry = new THREE.BoxGeometry(radius, radius, radius);
+        const geometry = new THREE.BoxGeometry(width, width, width);
 
         const loader = new THREE.TextureLoader();
-        let texture = isTimes2 ? x2 : x10;
+        const texture = isTimes2 ? x2 : x10;    // Load in the relevant multiplier texture
         const materials = new THREE.MeshPhongMaterial({ map: loader.load(texture) })
 
-        const circle = new THREE.Mesh(geometry, materials);
-        this.mesh = circle;
+        const cube = new THREE.Mesh(geometry, materials);
+        this.mesh = cube;
         this.distRad = 15;
         this.mesh.position.z = -this.distRad;
         this.mesh.name = "multiplier"
@@ -34,10 +34,11 @@ class Multiplier extends Group {
         // Add self to parent's update list (if needed)
         parent.addToUpdateList(this);
 
-        // This gets a random point on the sphere, check out this: https://mathworld.wolfram.com/SpherePointPicking.html,
-        // similary to A3
+        // This gets a random point on the sphere the x10 multiplier should move around,
+        // check out this: https://mathworld.wolfram.com/SpherePointPicking.html, from A3
         if (!this.isTimes2) {
 
+            // Gets new random position on sphere
             let u = Math.random() * 2 - 1; // Random value [-1, 1]
             let theta = Math.random() * 2 * Math.PI; // Random value [0, 2PI]
 
@@ -50,15 +51,16 @@ class Multiplier extends Group {
 
             // Both tweens
             const shrink = new TWEEN.Tween(this.mesh.scale)
-                .to(new THREE.Vector3(0, 0, 0), 2000)
+                .to(new THREE.Vector3(0, 0, 0), 5000)
                 .easing(TWEEN.Easing.Exponential.In);
 
             const expand = new TWEEN.Tween(this.mesh.scale)
-                .to(new THREE.Vector3(1, 1, 1), 2000)
+                .to(new THREE.Vector3(1, 1, 1), 5000)
                 .easing(TWEEN.Easing.Exponential.Out);
 
             // What to do when the tweens complete
             shrink.onComplete(() => {
+                // Another new position
                 let newU = Math.random() * 2 - 1; // Random value [-1, 1]
                 let newTheta = Math.random() * 2 * Math.PI; // Random value [0, 2PI]
 
@@ -83,6 +85,7 @@ class Multiplier extends Group {
     update(timeStamp) {
         TWEEN.update();
 
+        // The x2 multiplier just orbits around the screen
         if (this.isTimes2) {
             const speed = 2000
 

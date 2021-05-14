@@ -28,7 +28,7 @@ class Border extends Group {
     }
 
     update(timeStamp) {
-        // Put any updates you want to occur in here
+        // Placeholder in case later updates are desired
     }
 }
 

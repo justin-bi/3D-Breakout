@@ -101,8 +101,9 @@ class Ball extends Group {
     // This function clamps the position values of the ball to make sure that it never goes outside the boundaries of the 
     // screen. 
     clampBounds() {
-        this.position.x = Math.max(this.minX, Math.min(this.maxX, this.position.x)); // Clamp x
-        this.position.y = Math.max(this.minY, Math.min(this.maxY, this.position.y)); // Clamp y
+        const EPS = 0.001
+        this.position.x = Math.max(this.minX + EPS, Math.min(this.maxX - EPS, this.position.x)); // Clamp x
+        this.position.y = Math.max(this.minY + EPS, Math.min(this.maxY - EPS, this.position.y)); // Clamp y
     }
 
     // Initiate the tweening of colors
@@ -189,6 +190,8 @@ class Ball extends Group {
                 this.state.vel.x *= -1;
             }
 
+            // This code handles specialized collision with the paddle, for example, if the paddle moves towards the ball
+            // when it hits it, the ball should reverse direction if hit on the close side of the paddle
             if (object.name === "paddle") {
 
                 // This code makes sure that if the ball is colliding with the paddle, it ensures that the ball ends up 

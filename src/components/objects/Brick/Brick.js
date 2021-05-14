@@ -41,6 +41,7 @@ class Brick extends Group {
             try{
                 this.mesh.parent.remove(this.mesh);
             } catch(err) {
+                // Shouldn't pop in here anymore, but here just in case
                 console.log(this);
                 console.warn(err);
             }
@@ -50,7 +51,7 @@ class Brick extends Group {
     }
 
     update(timeStamp) {
-        // Put any updates you want to occur in here
+        // Placeholder in case other updates are desired
     }
 }
 

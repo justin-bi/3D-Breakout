@@ -17,7 +17,7 @@ import { Color } from 'three';
 
 // Initialize core ThreeJS components
 const camera = new PerspectiveCamera();
-var scene = new BreakoutScene(camera);
+var scene = new BreakoutScene(camera);  // Pass camera in to see if objects are in view
 const renderer = new WebGLRenderer({ antialias: true });
 
 const CAMERA_POS_Z = [10, 11, 12, 13, 14, 15, 16];
@@ -40,7 +40,7 @@ controls.target = new Vector3(0, 1.5, 0);  // Changes where the cam focuses
 controls.enableDamping = true;
 controls.enablePan = false;
 controls.minDistance = 8;
-controls.maxDistance = 120;
+controls.maxDistance = 12;
 controls.update();
 
 let lastLevel = 0;
@@ -57,7 +57,7 @@ const onAnimationFrameHandler = (timeStamp) => {
         camera.position.set(0, 1.5, CAMERA_POS_Z[[scene.currentLevelNum]]);
     }
 
-    // Update the points
+    // Update the points scored
     pointText.innerText = "Points: " + scene.points.toString().padStart(4, '0');
 
     lastLevel = scene.currentLevelNum;
@@ -155,8 +155,9 @@ let handlePlayerEvent = function (event) {
             window.location.reload();
         }
         else if (scene.levelOver) {
+            scene.levelOver = false;
             const LEVEL_COLORS = [0xCAF0F8, 0x90E0EF, 0x00B4D8, 0x0096C7, 0x0077B6, 0x023E8A, 0x03045E];
-            // Tween for camera? Could be fun haha
+            // Tween for camera level transitions
             const viewRise = new TWEEN.Tween(controls.target)
                 .to(new THREE.Vector3(0, 10, 0), 700)
                 .easing(TWEEN.Easing.Quadratic.InOut);
@@ -166,12 +167,10 @@ let handlePlayerEvent = function (event) {
 
             const viewFall = new TWEEN.Tween(controls.target)
                 .to(new THREE.Vector3(0, 1.5, 0), 700)
-                // .easing(TWEEN.Easing.Back.Out);
                 .easing(TWEEN.Easing.Quadratic.InOut);
 
             const camFall = new TWEEN.Tween(camera.position)
-                .to(new THREE.Vector3(0, 1.5, 10), 700) // End target might be a bit off with the level Z
-                // .easing(TWEEN.Easing.Back.Out);
+                .to(new THREE.Vector3(0, 1.5, 10), 700)
                 .easing(TWEEN.Easing.Quadratic.InOut);
 
             let newCol = new Color(LEVEL_COLORS[scene.currentLevelNum + 1]);
@@ -190,11 +189,12 @@ let handlePlayerEvent = function (event) {
             colorChange.start();
 
         }
-        // if scene hasn't started yet, make the sceen go away
+        // if scene hasn't started yet, make the screen go away
         else if (!scene.gameStarted) {
             instructionsContainer.style.visibility = 'hidden';
             scene.levelStartContainer.style.visibility = 'visible';
             scene.gameStarted = true;
+
             // Start the game music in here, since autoplay isn't allowed
             if (!loopMus.isPlaying) {
                 loopMus.volume = 0.4;
@@ -208,14 +208,15 @@ let handlePlayerEvent = function (event) {
             scene.levelStarted = true;
         }
     }
+    // pause events
     else if (event.key == "p") {
         if (isPaused && scene.levelStarted) {
-            loopMus.volume = 0.4; // If it's getting unpaused, turn the volume up again. 
+            loopMus.volume = 0.4; // If the game gets unpaused, turn the volume up again. 
             instructionsContainer.style.visibility = 'hidden';
         }
         else {
             instructionsContainer.style.visibility = 'visible';
-            loopMus.volume = 0.1;
+            loopMus.volume = 0.1; // If the game gets unpaused, turn the volume up again. 
         }
 
         isPaused = !isPaused;

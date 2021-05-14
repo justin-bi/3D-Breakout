@@ -23,6 +23,7 @@ class Heart extends Group {
         x = 5 * -SCALE;
         y = 5 * -SCALE;
 
+        // Constructs the heart shape, altered from the THREE js example
         heartShape.moveTo(x + 5 * SCALE, y + 5 * SCALE);
         heartShape.bezierCurveTo(x + 5 * SCALE, y + 5 * SCALE, x + 4 * SCALE, y, x, y);
         heartShape.bezierCurveTo(x - 6 * SCALE, y, x - 6 * SCALE, y + 7 * SCALE, x - 6 * SCALE, y + 7 * SCALE);
@@ -49,6 +50,7 @@ class Heart extends Group {
         parent.addToUpdateList(this);
     }
 
+    // Special tween animation when a life is lost
     remove() {
 
         const shrink = new TWEEN.Tween(this.mesh.scale)
@@ -65,7 +67,6 @@ class Heart extends Group {
     }
 
     update(timeStamp) {
-        // Put any updates you want to occur in here
         TWEEN.update()
     }
 }
