@@ -3,8 +3,6 @@ import * as THREE from 'three'
 import { TWEEN } from 'three/examples/jsm/libs/tween.module.min';
 import mus from './pong.ogg'
 
-let ballI = 0;  // DEBUGGING tool, delete when finalizing
-
 class Ball extends Group {
     constructor(parent, radius, color, translateVec, startVelocityVec) {
         // Call parent Group() constructor
@@ -170,6 +168,7 @@ class Ball extends Group {
                 this.changeColors(collisions[0].object);
 
                 var audio = new Audio(mus);
+                audio.volume = 0.8;
                 audio.play();
             }
 
