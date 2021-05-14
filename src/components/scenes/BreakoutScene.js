@@ -3,6 +3,7 @@ import { Scene } from 'three';
 import { Level } from 'levels';
 import { BasicLights } from 'lights';
 import * as THREE from 'three';
+import { Multiplier } from 'objects';
 
 import LevelWinSound from '../../assets/sounds/winSound.mp3';
 import GameWinSound from '../../assets/sounds/gameWin.mp3';
@@ -83,7 +84,7 @@ levelStartContainer.appendChild(levelStartText);
 levelStartContainer.style.visibility = "hidden";
 
 class BreakoutScene extends Scene {
-    constructor() {
+    constructor(camera) {
         // Call parent Scene() constructor
         super();
 
@@ -96,8 +97,16 @@ class BreakoutScene extends Scene {
         this.add(lights);
         this.lights = lights;
 
+        // Included the camera in here to see what it sees
+        this.camera = camera;
+
         // Add in points variable
         this.points = 0;
+
+        // Testing multiplier stuff
+        this.multipliers = []
+        this.multipliers.push(new Multiplier(this, 1, true))
+        this.multipliers.push(new Multiplier(this, 1, false))
 
         levelStartTitle.innerText = "Level 1";
         levelStartTitle.style.textShadow = "5px 5px " + LEVEL_COLORS_IN_HEX[0];
@@ -164,8 +173,22 @@ class BreakoutScene extends Scene {
         brick.mesh.collidable = false;
         this.bricksLeft--;
         brick.breakBrick();
-        this.points += 1;
 
+        this.camera.updateMatrix();
+        this.camera.updateMatrixWorld();
+        var frustum = new THREE.Frustum();
+        frustum.setFromProjectionMatrix(new THREE.Matrix4().multiplyMatrices(this.camera.projectionMatrix, this.camera.matrixWorldInverse));
+
+        let pointsToAdd = 1;
+        this.multipliers.forEach((m) => {
+            if (frustum.containsPoint(m.mesh.position) && m.mesh.scale.x > 0.1) {
+                pointsToAdd *= m.multiplyValue;
+            }
+        })
+
+        this.points += pointsToAdd;
+
+        
         if (this.bricksLeft <= 0) {
             this.levelWon = true;
             this.endLevel();
@@ -280,6 +303,8 @@ class BreakoutScene extends Scene {
         // remove all of the current elements:
         for (let i = this.children.length - 1; i >= 0; i--) {
             if(this.children[i].type !== "Mesh") continue;
+
+            if(this.children[i].name === "multiplier") continue;    // Keep the multipliers constant per level
 
             this.children[i].geometry.dispose();
             this.children[i].material.dispose();

@@ -16,8 +16,8 @@ import * as THREE from 'three'
 import { Color } from 'three';
 
 // Initialize core ThreeJS components
-var scene = new BreakoutScene();
 const camera = new PerspectiveCamera();
+var scene = new BreakoutScene(camera);
 const renderer = new WebGLRenderer({ antialias: true });
 
 const CAMERA_POS_Z = [10, 11, 12, 13, 14, 15, 16];
@@ -39,8 +39,8 @@ const controls = new OrbitControls(camera, canvas);
 controls.target = new Vector3(0, 1.5, 0);  // Changes where the cam focuses
 controls.enableDamping = true;
 controls.enablePan = false;
-controls.minDistance = 4;
-controls.maxDistance = 16;
+controls.minDistance = 8;
+controls.maxDistance = 120;
 controls.update();
 
 let lastLevel = 0;
@@ -56,6 +56,8 @@ const onAnimationFrameHandler = (timeStamp) => {
     if (scene.currentLevelNum > lastLevel) {
         camera.position.set(0, 1.5, CAMERA_POS_Z[[scene.currentLevelNum]]);
     }
+
+    // Update the points
     pointText.innerText = "Points: " + scene.points.toString().padStart(4, '0');
 
     lastLevel = scene.currentLevelNum;
@@ -168,19 +170,17 @@ let handlePlayerEvent = function (event) {
                 .easing(TWEEN.Easing.Quadratic.InOut);
 
             const camFall = new TWEEN.Tween(camera.position)
-                .to(new THREE.Vector3(0, 1.5, 10), 700)
+                .to(new THREE.Vector3(0, 1.5, 10), 700) // End target might be a bit off with the level Z
                 // .easing(TWEEN.Easing.Back.Out);
                 .easing(TWEEN.Easing.Quadratic.InOut);
 
             let newCol = new Color(LEVEL_COLORS[scene.currentLevelNum + 1]);
-            console.log(newCol);
             const colorChange = new TWEEN.Tween(scene.background)
                 .to(newCol, 500)
                 .easing(TWEEN.Easing.Linear.None);
 
             camRise.onComplete(() => {
                 scene.nextLevel();
-                console.log(scene.background)
                 camFall.start();
                 viewFall.start();
             })

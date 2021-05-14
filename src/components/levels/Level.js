@@ -1,7 +1,7 @@
 import { Group } from 'three';
 import { Color } from 'three';
 import * as THREE from 'three';
-import { Ball, Border, Brick, Heart, Platform } from 'objects';
+import { Ball, Border, Brick, Heart, Platform, Multiplier } from 'objects';
 
 class Level extends Group {
     constructor(parent, backgroundColor, brickColors, ballColor, borderColor, platformColor,
