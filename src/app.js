@@ -197,7 +197,7 @@ let handlePlayerEvent = function (event) {
 
             // Start the game music in here, since autoplay isn't allowed
             if (!loopMus.isPlaying) {
-                loopMus.volume = 0.4;
+                loopMus.volume = 0.2;
                 loopMus.playbackRate = 0.9;
                 loopMus.loop = true;
                 loopMus.play();
@@ -211,12 +211,12 @@ let handlePlayerEvent = function (event) {
     // pause events
     else if (event.key == "p") {
         if (isPaused && scene.levelStarted) {
-            loopMus.volume = 0.4; // If the game gets unpaused, turn the volume up again. 
+            loopMus.volume = 0.2; // If the game gets unpaused, turn the volume up again. 
             instructionsContainer.style.visibility = 'hidden';
         }
         else {
             instructionsContainer.style.visibility = 'visible';
-            loopMus.volume = 0.1; // If the game gets unpaused, turn the volume up again. 
+            loopMus.volume = 0.05; // If the game gets unpaused, turn the volume up again. 
         }
 
         isPaused = !isPaused;
