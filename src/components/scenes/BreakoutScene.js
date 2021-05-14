@@ -93,9 +93,11 @@ class BreakoutScene extends Scene {
         };
 
         const lights = new BasicLights();
-
         this.add(lights);
         this.lights = lights;
+
+        // Add in points variable
+        this.points = 0;
 
         levelStartTitle.innerText = "Level 1";
         levelStartTitle.style.textShadow = "5px 5px " + LEVEL_COLORS_IN_HEX[0];
@@ -162,6 +164,7 @@ class BreakoutScene extends Scene {
         brick.mesh.collidable = false;
         this.bricksLeft--;
         brick.breakBrick();
+        this.points += 1;
 
         if (this.bricksLeft <= 0) {
             this.levelWon = true;

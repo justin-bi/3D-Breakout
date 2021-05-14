@@ -1,6 +1,26 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
+#point-container {
+	position: absolute;
+	top: 10px;
+    left: 10px;
+	width: 100%;
+	text-align: center;
+	z-index: 100;
+	display:block;
+}
+
+#point-container h1 {
+    font-family: 'Press Start 2P' !important;
+    font-size: 23px;
+    color: white;
+    padding: 0px;
+    margin: 0px;
+    text-shadow: 3px 3px #17183b; /* space cadet */
+    text-align: left;
+}
+
 #title-container {
     justify-content: center;
     align-items: center;

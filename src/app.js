@@ -56,6 +56,7 @@ const onAnimationFrameHandler = (timeStamp) => {
     if (scene.currentLevelNum > lastLevel) {
         camera.position.set(0, 1.5, CAMERA_POS_Z[[scene.currentLevelNum]]);
     }
+    pointText.innerText = "Points: " + scene.points.toString().padStart(4, '0');
 
     lastLevel = scene.currentLevelNum;
     window.requestAnimationFrame(onAnimationFrameHandler);
@@ -71,6 +72,15 @@ const windowResizeHandler = () => {
 };
 windowResizeHandler();
 window.addEventListener('resize', windowResizeHandler, false);
+
+// make points container
+let pointContainer = document.createElement('div');
+pointContainer.id = "point-container";
+document.body.appendChild(pointContainer);
+
+let pointText = document.createElement('h1');
+pointText.innerText = "Points: " + scene.points.toString().padStart(4, '0');
+pointContainer.appendChild(pointText);
 
 // make title
 let titleContainer = document.createElement('div');
@@ -147,20 +157,20 @@ let handlePlayerEvent = function (event) {
             // Tween for camera? Could be fun haha
             const viewRise = new TWEEN.Tween(controls.target)
                 .to(new THREE.Vector3(0, 10, 0), 700)
-                .easing(TWEEN.Easing.Quadratic.Out);
+                .easing(TWEEN.Easing.Quadratic.InOut);
             const camRise = new TWEEN.Tween(camera.position)
                 .to(new THREE.Vector3(0, 10, 10), 700)
-                .easing(TWEEN.Easing.Quadratic.Out);
+                .easing(TWEEN.Easing.Quadratic.InOut);
 
             const viewFall = new TWEEN.Tween(controls.target)
                 .to(new THREE.Vector3(0, 1.5, 0), 700)
                 // .easing(TWEEN.Easing.Back.Out);
-                .easing(TWEEN.Easing.Quadratic.In);
+                .easing(TWEEN.Easing.Quadratic.InOut);
 
             const camFall = new TWEEN.Tween(camera.position)
                 .to(new THREE.Vector3(0, 1.5, 10), 700)
                 // .easing(TWEEN.Easing.Back.Out);
-                .easing(TWEEN.Easing.Quadratic.In);
+                .easing(TWEEN.Easing.Quadratic.InOut);
 
             let newCol = new Color(LEVEL_COLORS[scene.currentLevelNum + 1]);
             console.log(newCol);
